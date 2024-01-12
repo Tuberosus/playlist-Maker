@@ -2,7 +2,8 @@
 <resources>
     <dimen name="main_text_size">22sp</dimen>
     <dimen name="text_size">16sp</dimen>
-    <dimen name="step">26dp</dimen>
+    <dimen name="gap1">26dp</dimen>
+    <dimen name="gap2">20dp</dimen>
     <dimen name="padding_size">16dp</dimen>
     <dimen name="icon_padding">8dp</dimen>
 </resources>
