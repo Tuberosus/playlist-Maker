@@ -9,33 +9,28 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/gap1">
-                <ImageView
+                <ImageView style="@style/PanelHeader"
                     android:id="@+id/imageBackAction"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:src="@drawable/arrow_back"
-                    app:tint="?attr/colorOnPrimary"
                     android:foreground="?attr/selectableItemBackground"/>
-                <TextView style="@style/SettingsHeaderText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <TextView style="@style/PanelHeader"
                     android:text="@string/settings"
                     android:paddingStart="@dimen/padding_size"/>
         </LinearLayout>
 
-        <androidx.appcompat.widget.SwitchCompat style="@style/SettingsText"
+        <androidx.appcompat.widget.SwitchCompat style="@style/SettingsActivityText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/dark_theme"
             android:paddingBottom="@dimen/gap1"/>
 
         <FrameLayout
+            android:id="@+id/layoutShare"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/gap1">
-                <TextView style="@style/SettingsText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/gap1"
+            android:foreground="?attr/selectableItemBackground">
+                <TextView style="@style/SettingsActivityText"
                     android:text="@string/share_app" />
                 <ImageView
                     android:layout_width="wrap_content"
@@ -45,12 +40,12 @@
         </FrameLayout>
 
         <FrameLayout
+            android:id="@+id/layoutSupport"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/gap1">
-                <TextView style="@style/SettingsText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/gap1"
+            android:foreground="?attr/selectableItemBackground">
+                <TextView style="@style/SettingsActivityText"
                     android:text="@string/support" />
                 <ImageView
                     android:layout_width="wrap_content"
@@ -60,12 +55,12 @@
         </FrameLayout>
 
         <FrameLayout
+            android:id="@+id/layoutUserAgreement"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/gap1">
-                <TextView style="@style/SettingsText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/gap1"
+            android:foreground="?attr/selectableItemBackground">
+                <TextView style="@style/SettingsActivityText"
                     android:text="@string/user_agreement" />
                 <ImageView
                     android:layout_width="wrap_content"
