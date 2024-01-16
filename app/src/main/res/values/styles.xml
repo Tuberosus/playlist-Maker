@@ -28,6 +28,15 @@
         <item name="iconPadding">@dimen/icon_padding</item>
         <item name="iconTint">@color/yp_black</item>
     </style>
+
+    <style name="CustomEditText">
+        <item name="android:lines">1</item>
+        <item name="android:paddingStart">@dimen/icon_padding</item>
+        <item name="android:drawablePadding">@dimen/icon_padding</item>
+        <item name="android:drawableTint">@color/gray</item>
+        <item name="android:fontFamily">@font/ys_text_regular</item>
+        <item name="android:textColorHint">@color/gray</item>
+    </style>
 </resources>
 
 <!--parent="Widget.MaterialComponents.Button.UnelevatedButton"-->

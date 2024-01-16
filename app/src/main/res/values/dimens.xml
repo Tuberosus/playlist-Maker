@@ -6,4 +6,5 @@
     <dimen name="gap2">20dp</dimen>
     <dimen name="padding_size">16dp</dimen>
     <dimen name="icon_padding">8dp</dimen>
+    <dimen name="input_height">52dp</dimen>
 </resources>
