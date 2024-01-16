@@ -12,6 +12,6 @@
         <item name="colorSecondaryVariant">@color/white</item>
         <!--item name="colorOnSecondary">@color/black</item-->
         <!--Background-->
-        <item name="android:background">@color/yp_black</item>
+        <!--<item name="android:background">@color/yp_black</item>-->
     </style>
 </resources>

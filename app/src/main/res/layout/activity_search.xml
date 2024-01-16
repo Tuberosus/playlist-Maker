@@ -26,14 +26,13 @@
             android:text="@string/search" />
     </LinearLayout>
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
-
         <EditText
             android:id="@+id/inputEditText"
             style="@style/CustomEditText"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/input_height"
             android:layout_weight="1"
             android:background="@drawable/custom_edit_text"
@@ -48,11 +47,11 @@
             android:id="@+id/clearIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingStart="@dimen/icon_padding"
-            android:layout_gravity="center"
+            android:paddingEnd="@dimen/icon_padding"
+            android:layout_gravity="end|center"
             android:src="@drawable/ic_close"
             android:visibility="gone"/>
-    </LinearLayout>
+    </FrameLayout>
 
 
 </LinearLayout>
