@@ -5,9 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.widget.FrameLayout
 import android.widget.ImageView
-import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.button.MaterialButton
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,15 +32,14 @@ class SettingsActivity : AppCompatActivity() {
         val supportClick = findViewById<FrameLayout>(R.id.layoutSupport)
         supportClick.setOnClickListener {
 
-            val shareIntent = Intent().apply {
+            Intent().apply {
                 action =Intent.ACTION_SENDTO
                 data = Uri.parse("mailto:")
                 putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.student_email)))
                 putExtra(Intent.EXTRA_SUBJECT, getString(R.string.support_email_subject))
                 putExtra(Intent.EXTRA_TEXT, getString(R.string.support_default_text))
+                startActivity(this)
             }
-
-            startActivity(shareIntent)
         }
 
         val userAgreementClick = findViewById<FrameLayout>(R.id.layoutUserAgreement)

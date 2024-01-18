@@ -21,6 +21,7 @@
         <androidx.appcompat.widget.SwitchCompat style="@style/SettingsActivityText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_size"
             android:text="@string/dark_theme"
             android:paddingBottom="@dimen/gap1"/>
 
