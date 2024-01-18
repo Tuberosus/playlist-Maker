@@ -3,86 +3,71 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="@dimen/padding_size"
     android:orientation="vertical">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/back"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
-            style="?android:attr/borderlessButtonStyle"
-            android:textAlignment="viewStart"
-            android:text="@string/settings"
-            android:textColor="@color/text_color"
-            android:textSize="@dimen/main_text_size"
-            android:textAllCaps="false"
-            android:layout_marginTop="4dp"
-            app:icon="@drawable/arrow_back"
-            app:iconPadding="@dimen/padding_size"
-            app:iconTint="@color/text_color"/>
+            android:paddingBottom="@dimen/gap1">
+                <ImageView style="@style/PanelHeader"
+                    android:id="@+id/imageBackAction"
+                    android:src="@drawable/arrow_back"
+                    android:foreground="?attr/selectableItemBackground"/>
+                <TextView style="@style/PanelHeader"
+                    android:text="@string/settings"
+                    android:paddingStart="@dimen/padding_size"/>
+        </LinearLayout>
 
-        <androidx.appcompat.widget.SwitchCompat
+        <androidx.appcompat.widget.SwitchCompat style="@style/SettingsActivityText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
+            android:layout_marginTop="@dimen/padding_size"
             android:text="@string/dark_theme"
-            android:textSize="@dimen/text_size"
-            android:textAllCaps="false"
-            android:textAlignment="viewStart"
-            android:textColor="@color/black"
-            android:fontFamily="sans-serif"
-            android:layout_marginHorizontal="@dimen/padding_size"
-            android:layout_marginTop="21dp" />
-        <com.google.android.material.button.MaterialButton
+            android:paddingBottom="@dimen/gap1"/>
+
+        <FrameLayout
+            android:id="@+id/layoutShare"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
-            style="?android:attr/borderlessButtonStyle"
-            android:text="@string/share_app"
-            android:fontFamily="sans-serif"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size"
-            android:textAllCaps="false"
-            android:textAlignment="viewStart"
-            android:paddingHorizontal="0dp"
-            android:layout_marginHorizontal="@dimen/padding_size"
-            android:layout_marginTop="21dp"
-            app:icon="@drawable/share"
-            app:iconGravity="end"
-            app:iconTint="@color/gray" />
-        <com.google.android.material.button.MaterialButton
+            android:paddingBottom="@dimen/gap1"
+            android:foreground="?attr/selectableItemBackground">
+                <TextView style="@style/SettingsActivityText"
+                    android:text="@string/share_app" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/share"
+                    android:layout_gravity="end"/>
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/layoutSupport"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
-            style="?android:attr/borderlessButtonStyle"
-            android:text="@string/support"
-            android:fontFamily="sans-serif"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size"
-            android:textAllCaps="false"
-            android:textAlignment="viewStart"
-            android:paddingHorizontal="0dp"
-            android:layout_marginHorizontal="@dimen/padding_size"
-            android:layout_marginTop="21dp"
-            app:icon="@drawable/support"
-            app:iconGravity="end"
-            app:iconTint="@color/gray" />
-        <com.google.android.material.button.MaterialButton
+            android:paddingBottom="@dimen/gap1"
+            android:foreground="?attr/selectableItemBackground">
+                <TextView style="@style/SettingsActivityText"
+                    android:text="@string/support" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/support"
+                    android:layout_gravity="end" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/layoutUserAgreement"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
-            style="?android:attr/borderlessButtonStyle"
-            android:text="@string/user_agreement"
-            android:fontFamily="sans-serif"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size"
-            android:textAllCaps="false"
-            android:textAlignment="viewStart"
-            android:paddingHorizontal="0dp"
-            android:layout_marginHorizontal="@dimen/padding_size"
-            android:layout_marginTop="21dp"
-            app:icon="@drawable/arrow_forward"
-            app:iconGravity="end"
-            app:iconTint="@color/gray" />
+            android:paddingBottom="@dimen/gap1"
+            android:foreground="?attr/selectableItemBackground">
+                <TextView style="@style/SettingsActivityText"
+                    android:text="@string/user_agreement" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/arrow_forward"
+                    android:layout_gravity="end"/>
+        </FrameLayout>
 
 </LinearLayout>

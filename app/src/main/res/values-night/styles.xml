@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="SettingsHeaderText">
+        <item name="android:fontFamily">@font/ys_text_medium</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="android:textSize">@dimen/main_text_size</item>
+    </style>
+
+    <style name="CustomEditText">
+        <item name="android:lines">1</item>
+        <item name="android:paddingStart">@dimen/icon_padding</item>
+        <item name="android:drawablePadding">@dimen/icon_padding</item>
+        <item name="android:drawableTint">@color/yp_black</item>
+        <item name="android:fontFamily">@font/ys_text_regular</item>
+        <item name="android:textColorHint">@color/yp_black</item>
+        <item name="android:textColor">@color/yp_black</item>
+    </style>
+</resources>
