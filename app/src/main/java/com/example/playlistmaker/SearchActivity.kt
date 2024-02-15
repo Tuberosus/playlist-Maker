@@ -9,6 +9,8 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 class SearchActivity : AppCompatActivity() {
 
@@ -50,6 +52,11 @@ class SearchActivity : AppCompatActivity() {
             }
         }
         inputEditText.addTextChangedListener(simpleTextWatcher)
+
+        // RecyclerView for tracklist
+        val recycler: RecyclerView = findViewById(R.id.trackView)
+        recycler.layoutManager = LinearLayoutManager(this@SearchActivity)
+        recycler.adapter = TrackAdapter(TrackList.trackList)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
