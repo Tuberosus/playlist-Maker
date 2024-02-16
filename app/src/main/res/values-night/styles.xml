@@ -32,4 +32,13 @@
         <item name="android:maxLines">1</item>
         <item name="android:ellipsize">end</item>
     </style>
+
+    <style name="RefreshButtonSearch">
+        <item name="android:fontFamily">@font/ys_text_medium</item>
+        <item name="android:textSize">@dimen/button_text_size</item>
+        <item name="android:backgroundTint">?attr/colorOnSecondary</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:layout_marginTop">@dimen/padding_size</item>
+        <item name="android:textColor">@color/yp_black</item>
+    </style>
 </resources>

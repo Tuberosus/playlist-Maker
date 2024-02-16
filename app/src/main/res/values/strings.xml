@@ -12,4 +12,7 @@
     <string name="student_email">ber9za@yandex.ru</string>
     <string name="support_email_subject">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
     <string name="support_default_text">Спасибо разработчикам и разработчицам за крутое приложение!</string>
+    <string name="trackNotFound">Ничего не нашлось</string>
+    <string name="networkError">Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету</string>
+    <string name="refresh">Обновить</string>
 </resources>
