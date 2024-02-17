@@ -1,6 +1,7 @@
 package com.example.playlistmaker
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.widget.FrameLayout
@@ -51,10 +52,15 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        val sharedPrefs = getSharedPreferences(SETTING_PREFERENCES, MODE_PRIVATE)
         val themeSwitcher = findViewById<SwitchCompat>(R.id.themeSwitcher)
         themeSwitcher.isChecked = (applicationContext as App).darkTheme
         themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
             (applicationContext as App).switchTheme(checked)
+
+            sharedPrefs.edit()
+                .putBoolean(DARK_THEME, checked)
+                .apply()
         }
     }
 

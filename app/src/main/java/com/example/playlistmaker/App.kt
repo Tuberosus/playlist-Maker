@@ -11,10 +11,8 @@ class App: Application() {
     override fun onCreate() {
         super.onCreate()
         val sharedPrefs = getSharedPreferences(SETTING_PREFERENCES, MODE_PRIVATE)
-        darkTheme = sharedPrefs.getString(DARK_THEME, "false").toBoolean()
-        sharedPrefs.edit()
-            .putString(DARK_THEME, darkTheme.toString())
-            .apply()
+        darkTheme = sharedPrefs.getBoolean(DARK_THEME, false)
+        switchTheme(darkTheme)
     }
 
     fun switchTheme(darkThemeEnabled: Boolean) {
