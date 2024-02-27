@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <TextView style="@style/SearchErrorAndHistory"
+        android:id="@+id/tv_search_history"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/search_history"
+        android:textColor="?attr/colorOnSecondary" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_track_search_history"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginVertical="@dimen/padding_size"
+        android:layout_weight="1"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+    <Button style="@style/RefreshButtonSearch"
+        android:id="@+id/btn_clear_search_history"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/clear_history"
+        android:foreground="?attr/selectableItemBackground"/>
+</LinearLayout>

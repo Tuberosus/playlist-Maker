@@ -65,6 +65,14 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:foreground">?attr/selectableItemBackground</item>
     </style>
+
+    <style name="SearchErrorAndHistory">
+        <item name="android:textSize">@dimen/text_error_size</item>
+        <item name="android:fontFamily">@font/ys_text_medium</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_marginTop">@dimen/padding_size</item>
+    </style>
 </resources>
 
 <!--parent="Widget.MaterialComponents.Button.UnelevatedButton"-->

@@ -55,33 +55,41 @@
             android:visibility="gone"/>
     </FrameLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/trackView"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="@dimen/padding_size" />
+        android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/iv_placeholder"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/input_height"
-        android:layout_gravity="center_horizontal"/>
-    <TextView
-        android:id="@+id/text_error"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="?attr/colorOnSecondary"
-        android:textSize="@dimen/text_error_size"
-        android:fontFamily="@font/ys_text_medium"
-        android:layout_gravity="center_horizontal"
-        android:gravity="center"
-        android:layout_marginTop="@dimen/padding_size"/>
-    <Button style="@style/RefreshButtonSearch"
-        android:id="@+id/btn_refresh"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:text="@string/refresh" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/trackView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/padding_size"
+            android:foreground="?attr/selectableItemBackground"/>
 
+        <!--Заглушки для отображения ошибок-->
+        <ImageView
+            android:id="@+id/iv_placeholder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/input_height"
+            android:layout_gravity="center_horizontal"/>
+        <TextView style="@style/SearchErrorAndHistory"
+            android:id="@+id/text_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/colorOnSecondary" />
+        <Button style="@style/RefreshButtonSearch"
+            android:id="@+id/btn_refresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:text="@string/refresh" />
+        <!--/////////////////////////////////////////////////-->
+
+        <!--Отображение истории поиска-->
+        <include layout="@layout/search_history_view"
+            android:id="@+id/search_history"
+            android:visibility="gone"/>
+
+    </FrameLayout>
 </LinearLayout>

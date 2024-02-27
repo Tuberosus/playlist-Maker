@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatDelegate
 
 const val SETTING_PREFERENCES = "setting_preferences"
 const val DARK_THEME = "dark_theme"
+const val SEARCH_HISTORY = "search_history"
+
 
 class App: Application() {
     var darkTheme = false
