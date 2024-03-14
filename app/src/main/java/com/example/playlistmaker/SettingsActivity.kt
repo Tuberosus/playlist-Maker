@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SwitchCompat
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,6 +48,17 @@ class SettingsActivity : AppCompatActivity() {
             val url = Uri.parse(getString(R.string.url_agreement))
             val intent = Intent(Intent.ACTION_VIEW, url)
             startActivity(intent)
+        }
+
+        val sharedPrefs = getSharedPreferences(SETTING_PREFERENCES, MODE_PRIVATE)
+        val themeSwitcher = findViewById<SwitchCompat>(R.id.themeSwitcher)
+        themeSwitcher.isChecked = (applicationContext as App).darkTheme
+        themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
+            (applicationContext as App).switchTheme(checked)
+
+            sharedPrefs.edit()
+                .putBoolean(DARK_THEME, checked)
+                .apply()
         }
     }
 

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="switch_knob">@color/yp_blue</color>
+    <color name="switch_track">@color/yp_blue_light</color>
+</resources>

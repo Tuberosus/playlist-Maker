@@ -1,5 +1,6 @@
 package com.example.playlistmaker
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -16,6 +17,14 @@ class TrackAdapter() : RecyclerView.Adapter<TrackViewHolder> () {
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         holder.bind(trackList[position])
-    }
 
+        holder.itemView.setOnClickListener {
+            val sharedPrefs = holder.itemView.context.getSharedPreferences(SETTING_PREFERENCES,
+                                                                            Context.MODE_PRIVATE)
+            SearchHistory(sharedPrefs).apply {
+                addTrackToHistory(trackList[position])
+                write(trackSearchHistory)
+            }
+        }
+    }
 }
