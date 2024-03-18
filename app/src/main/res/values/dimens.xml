@@ -11,4 +11,12 @@
     <dimen name="icon_padding">8dp</dimen>
     <dimen name="input_height">52dp</dimen>
     <dimen name="artwork_radius">2dp</dimen>
+
+    <!-- Audio Player dimens -->
+    <dimen name="ap_14sp">14sp</dimen>
+    <dimen name="textInfoInPlayer">13sp</dimen>
+    <dimen name="ap_gap">30dp</dimen>
+    <dimen name="ap_gap1">24dp</dimen>
+    <dimen name="ap_gap2">20dp</dimen>
+    <dimen name="ap_margin">4dp</dimen>
 </resources>

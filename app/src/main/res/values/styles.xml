@@ -73,6 +73,19 @@
         <item name="android:gravity">center</item>
         <item name="android:layout_marginTop">@dimen/padding_size</item>
     </style>
+
+    <!-- Стили аудиоплеера -->
+    <style name="TextInfo">
+        <item name="android:textSize">@dimen/textInfoInPlayer</item>
+        <item name="android:fontFamily">@font/ys_text_regular</item>
+        <item name="android:textColor">@color/gray</item>
+    </style>
+
+    <style name="Info">
+        <item name="android:textSize">@dimen/textInfoInPlayer</item>
+        <item name="android:fontFamily">@font/ys_text_regular</item>
+        <item name="android:textColor">?attr/colorOnSecondary</item>
+    </style>
 </resources>
 
 <!--parent="Widget.MaterialComponents.Button.UnelevatedButton"-->
