@@ -9,6 +9,10 @@ import com.google.gson.Gson
 
 class TrackAdapter() : RecyclerView.Adapter<TrackViewHolder> () {
 
+    companion object {
+        const val trackTag = "track"
+    }
+
     var trackList = ArrayList<Track>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.track_view, parent, false)
@@ -31,7 +35,7 @@ class TrackAdapter() : RecyclerView.Adapter<TrackViewHolder> () {
             //переход в аудиоплеер
             val displayIntent = Intent(holder.itemView.context, AudioPlayerActivity::class.java)
             val json = Gson().toJson(trackList[position])
-            displayIntent.putExtra("track",json)
+            displayIntent.putExtra(trackTag,json)
             holder.itemView.context.startActivity(displayIntent)
         }
     }

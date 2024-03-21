@@ -19,7 +19,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         binding.buttonBack.setOnClickListener { finish() }
 
         // получение выбранного трека
-        val jsonTrack = intent.getStringExtra("track")
+        val jsonTrack = intent.getStringExtra(TrackAdapter.trackTag)
         val track = Gson().fromJson(jsonTrack, Track::class.java)
 
         //загрузка фото альбома
