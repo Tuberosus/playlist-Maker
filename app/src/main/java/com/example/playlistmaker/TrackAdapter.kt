@@ -1,17 +1,11 @@
 package com.example.playlistmaker
 
 import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.google.gson.Gson
 
-class TrackAdapter() : RecyclerView.Adapter<TrackViewHolder> () {
-
-    companion object {
-        const val trackTag = "track"
-    }
+class TrackAdapter(val clickListener: TrackClickListener) : RecyclerView.Adapter<TrackViewHolder> () {
 
     var trackList = ArrayList<Track>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
@@ -33,10 +27,11 @@ class TrackAdapter() : RecyclerView.Adapter<TrackViewHolder> () {
             }
 
             //переход в аудиоплеер
-            val displayIntent = Intent(holder.itemView.context, AudioPlayerActivity::class.java)
-            val json = Gson().toJson(trackList[position])
-            displayIntent.putExtra(trackTag,json)
-            holder.itemView.context.startActivity(displayIntent)
+            clickListener.onTrackClick(trackList[position])
         }
+    }
+
+    fun interface TrackClickListener {
+        fun onTrackClick(track: Track)
     }
 }

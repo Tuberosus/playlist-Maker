@@ -55,18 +55,32 @@
             android:visibility="gone"/>
     </FrameLayout>
 
+    <!-- Прогресс бар поиска -->
+    <ProgressBar
+        android:id="@+id/search_progressbar"
+        android:layout_width="@dimen/progress_bar_size"
+        android:layout_height="@dimen/progress_bar_size"
+        android:layout_gravity="center"
+        android:layout_marginTop="140dp"
+        android:indeterminateTint="@color/yp_blue"
+        android:visibility="gone" />
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <!--Заглушки для отображения ошибок-->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/trackView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginVertical="@dimen/padding_size"
-            android:foreground="?attr/selectableItemBackground"/>
+            android:foreground="?attr/selectableItemBackground" />
 
-        <!--Заглушки для отображения ошибок-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
         <ImageView
             android:id="@+id/iv_placeholder"
             android:layout_width="match_parent"
@@ -84,6 +98,8 @@
             android:layout_height="wrap_content"
             android:visibility="gone"
             android:text="@string/refresh" />
+
+        </LinearLayout>
         <!--/////////////////////////////////////////////////-->
 
         <!--Отображение истории поиска-->
