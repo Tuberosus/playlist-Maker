@@ -1,4 +1,4 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.ui.search
 
 import android.content.Context
 import android.content.Intent
@@ -19,8 +19,13 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.playlistmaker.services.itunes.ITunesAPI
-import com.example.playlistmaker.services.itunes.SongsResponse
+import com.example.playlistmaker.R
+import com.example.playlistmaker.SETTING_PREFERENCES
+import com.example.playlistmaker.domain.SearchHistory
+import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.data.api.ITunesAPI
+import com.example.playlistmaker.data.dto.SongsResponse
+import com.example.playlistmaker.ui.audioPlayer.AudioPlayerActivity
 import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback

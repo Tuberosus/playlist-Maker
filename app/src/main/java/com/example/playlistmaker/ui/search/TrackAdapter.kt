@@ -1,9 +1,13 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.ui.search
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.playlistmaker.R
+import com.example.playlistmaker.SETTING_PREFERENCES
+import com.example.playlistmaker.domain.SearchHistory
+import com.example.playlistmaker.domain.models.Track
 
 class TrackAdapter(val clickListener: TrackClickListener) : RecyclerView.Adapter<TrackViewHolder> () {
 
@@ -19,7 +23,8 @@ class TrackAdapter(val clickListener: TrackClickListener) : RecyclerView.Adapter
         holder.bind(trackList[position])
 
         holder.itemView.setOnClickListener {
-            val sharedPrefs = holder.itemView.context.getSharedPreferences(SETTING_PREFERENCES,
+            val sharedPrefs = holder.itemView.context.getSharedPreferences(
+                SETTING_PREFERENCES,
                                                                             Context.MODE_PRIVATE)
             SearchHistory(sharedPrefs).apply {
                 addTrackToHistory(trackList[position])

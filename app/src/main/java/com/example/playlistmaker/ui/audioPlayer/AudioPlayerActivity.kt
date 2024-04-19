@@ -1,6 +1,5 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.ui.audioPlayer
 
-import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -8,26 +7,24 @@ import android.util.TypedValue
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.playlistmaker.Creator
+import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityAudioPlayerBinding
-import com.google.gson.Gson
+import com.example.playlistmaker.domain.models.PlayerState
+import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.ui.search.SearchActivity
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class AudioPlayerActivity : AppCompatActivity() {
 
-    companion object {
-        private const val STATE_DEFAULT = 0
-        private const val STATE_PREPARED = 1
-        private const val STATE_PLAYING = 2
-        private const val STATE_PAUSED = 3
-    }
-
+    private lateinit var track: Track
     private lateinit var binding: ActivityAudioPlayerBinding
 
-    private var playerState = STATE_DEFAULT
     private lateinit var handler: Handler
     private lateinit var runnable: Runnable
-    private val mediaPlayer = MediaPlayer()
+
+    private val playerInteractor = Creator.provideMediaPlayerInteractor()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +39,7 @@ class AudioPlayerActivity : AppCompatActivity() {
 
         // получение выбранного трека
         val jsonTrack = intent.getStringExtra(SearchActivity.TRACK_TAG)
-        val track = Gson().fromJson(jsonTrack, Track::class.java)
+        track = Creator.provideGetTrackUseCase().execute(jsonTrack!!)
 
         //загрузка фото альбома
         Glide.with(this)
@@ -70,56 +67,54 @@ class AudioPlayerActivity : AppCompatActivity() {
             country.text = track.country
         }
 
-        //получение url аудио трека
+        //загрузка трека в медиаплеер
         if (!track.previewUrl.isNullOrBlank()) {
-            preparePlayer(track.previewUrl)
-            binding.buttonPlay.setOnClickListener { playbackControl() }
+            playerInteractor.preparePlayer(
+                url = track.previewUrl!!,
+                callback = {
+                    handler.removeCallbacks(runnable)
+                    binding.buttonPlay.setImageResource(R.drawable.button_play)
+                    binding.currentDuration.text = getText(R.string.current_duration)
+                    }
+                )
+        }
+
+        //обработка нажатия кнопки play
+        binding.buttonPlay.setOnClickListener { playbackControl() }
+
+    }
+
+    private fun playbackControl() {
+        when (playerInteractor.getState()) {
+            PlayerState.PLAYING -> pause()
+            PlayerState.PAUSED -> play()
+            PlayerState.PREPARED -> play()
+            else -> null
         }
     }
 
     override fun onPause() {
         super.onPause()
-        pausePlayer()
+        pause()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        mediaPlayer.release()
+        playerInteractor.release()
         handler.removeCallbacks(runnable)
     }
 
-    private fun preparePlayer(url: String) {
-        mediaPlayer.apply {
-            setDataSource(url)
-            prepareAsync()
-            setOnPreparedListener { playerState = STATE_PREPARED }
-            setOnCompletionListener {
-                handler.removeCallbacks(runnable)
-                playerState = STATE_PREPARED
-                binding.buttonPlay.setImageResource(R.drawable.button_play)
-                binding.currentDuration.text = getText(R.string.current_duration)
-            }
+    private fun play() {
+        playerInteractor.play {
+            binding.buttonPlay.setImageResource(R.drawable.button_pause)
+            handler.post(runnable)
         }
     }
 
-    private fun startPlayer() {
-        mediaPlayer.start()
-        binding.buttonPlay.setImageResource(R.drawable.button_pause)
-        playerState = STATE_PLAYING
-        handler.post(runnable)
-    }
-
-    private fun pausePlayer() {
-        mediaPlayer.pause()
-        binding.buttonPlay.setImageResource(R.drawable.button_play)
-        playerState = STATE_PAUSED
-        handler.removeCallbacks(runnable)
-    }
-
-    private fun playbackControl() {
-        when(playerState) {
-            STATE_PLAYING -> pausePlayer()
-            STATE_PREPARED, STATE_PAUSED -> startPlayer()
+    private fun pause() {
+        playerInteractor.pause {
+            binding.buttonPlay.setImageResource(R.drawable.button_play)
+            handler.removeCallbacks(runnable)
         }
     }
 
@@ -127,7 +122,9 @@ class AudioPlayerActivity : AppCompatActivity() {
         return object : Runnable {
             override fun run() {
                 binding.currentDuration.text = SimpleDateFormat("mm:ss",
-                    Locale.getDefault()).format(mediaPlayer.currentPosition)
+                    Locale.getDefault()).format(
+                    //mediaPlayer.currentPosition
+                    playerInteractor.getCurrentPosition())
 
                 handler.postDelayed(this, 100)
             }

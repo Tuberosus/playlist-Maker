@@ -1,8 +1,12 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.ui.main
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.playlistmaker.ui.media.MediaActivity
+import com.example.playlistmaker.R
+import com.example.playlistmaker.ui.settings.SettingsActivity
+import com.example.playlistmaker.ui.search.SearchActivity
 import com.google.android.material.button.MaterialButton
 
 class MainActivity : AppCompatActivity() {
