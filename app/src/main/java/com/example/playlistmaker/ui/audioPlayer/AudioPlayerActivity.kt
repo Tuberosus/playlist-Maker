@@ -12,12 +12,14 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityAudioPlayerBinding
 import com.example.playlistmaker.domain.models.PlayerState
 import com.example.playlistmaker.domain.models.Track
-import com.example.playlistmaker.ui.search.SearchActivity
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class AudioPlayerActivity : AppCompatActivity() {
 
+    companion object {
+        const val TRACK_TAG = "track"
+    }
     private lateinit var track: Track
     private lateinit var binding: ActivityAudioPlayerBinding
 
@@ -38,7 +40,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         handler = Handler(Looper.getMainLooper())
 
         // получение выбранного трека
-        val jsonTrack = intent.getStringExtra(SearchActivity.TRACK_TAG)
+        val jsonTrack = intent.getStringExtra(TRACK_TAG)
         track = Creator.provideGetTrackUseCase().execute(jsonTrack!!)
 
         //загрузка фото альбома
@@ -123,7 +125,6 @@ class AudioPlayerActivity : AppCompatActivity() {
             override fun run() {
                 binding.currentDuration.text = SimpleDateFormat("mm:ss",
                     Locale.getDefault()).format(
-                    //mediaPlayer.currentPosition
                     playerInteractor.getCurrentPosition())
 
                 handler.postDelayed(this, 100)

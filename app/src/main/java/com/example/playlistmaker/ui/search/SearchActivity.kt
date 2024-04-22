@@ -250,7 +250,7 @@ class SearchActivity : AppCompatActivity() {
         if (clickDebounce()) {
             val intent = Intent(this, AudioPlayerActivity::class.java)
             val json = Gson().toJson(track)
-            intent.putExtra(TRACK_TAG, json)
+            intent.putExtra(AudioPlayerActivity.TRACK_TAG, json)
             startActivity(intent)
         }
     }
@@ -274,6 +274,5 @@ class SearchActivity : AppCompatActivity() {
         const val DEF_TEXT = ""
         private const val CLICK_DEBOUNCE_DELAY = 1000L
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
-        const val TRACK_TAG = "track"
     }
 }
