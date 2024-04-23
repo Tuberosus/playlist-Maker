@@ -1,5 +1,6 @@
-package com.example.playlistmaker.services.itunes
+package com.example.playlistmaker.data.api
 
+import com.example.playlistmaker.data.dto.SongsResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
