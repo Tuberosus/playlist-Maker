@@ -58,7 +58,7 @@ class AudioPlayerActivity : AppCompatActivity() {
 //            }
 //        }
 
-        viewModel.loadPlayer()
+//            viewModel.loadPlayer()
 
 
         // кнопка назад
