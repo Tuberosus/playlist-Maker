@@ -11,11 +11,11 @@ class ExternalNavigatorImpl(private val application: Application): ExternalNavig
         val intent = Intent().apply {
             action = Intent.ACTION_SEND
             putExtra(Intent.EXTRA_TEXT, link)
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK
             type = "text/plain"
         }
-        application.startActivity(intent)
-
+        val shareIntent = Intent.createChooser(intent, null)
+        shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        application.startActivity(shareIntent)
     }
 
     override fun openLink(link: String) {

@@ -14,6 +14,7 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityAudioPlayerBinding
 import com.example.playlistmaker.domain.models.PlayerState
 import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.ui.audioPlayer.PlaybackState
 import com.example.playlistmaker.ui.audioPlayer.view_model.AudioPlayerViewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -23,14 +24,6 @@ class AudioPlayerActivity : AppCompatActivity() {
     companion object {
         const val TRACK_TAG = "track"
     }
-
-//    private val viewModel by lazy {
-//        val jsTrack = intent.getStringExtra(TRACK_TAG)
-//        ViewModelProvider(
-//            this,
-//            AudioPlayerViewModel.getViewModelFactory(jsTrack!!)
-//        )[AudioPlayerViewModel::class.java]
-//    }
 
     private lateinit var viewModel:AudioPlayerViewModel
 
@@ -57,7 +50,16 @@ class AudioPlayerActivity : AppCompatActivity() {
             loadTrackInfo(track)
         }
 
+//        viewModel.getPlaybackStateLiveData().observe(this) {playbackState ->
+//            when(playbackState) {
+//                PlaybackState.Play -> {}
+//                PlaybackState.Pause -> {}
+//                is PlaybackState.Timer -> { binding.currentDuration.text = playbackState.time}
+//            }
+//        }
+
         viewModel.loadPlayer()
+
 
         // кнопка назад
         binding.buttonBack.setOnClickListener { finish() }

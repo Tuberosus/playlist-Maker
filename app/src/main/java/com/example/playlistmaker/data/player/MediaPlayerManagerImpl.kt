@@ -11,7 +11,7 @@ class MediaPlayerManagerImpl: MediaPlayerManager {
 
     override fun preparePlayer(
         url: String,
-        //callback: () -> Unit
+        callback: () -> Unit
     ) {
         mediaPlayer.apply {
             setDataSource(url)

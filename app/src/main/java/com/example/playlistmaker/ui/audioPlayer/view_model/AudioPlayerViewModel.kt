@@ -1,5 +1,7 @@
 package com.example.playlistmaker.ui.audioPlayer.view_model
 
+import android.os.Handler
+import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,6 +15,8 @@ import com.example.playlistmaker.domain.player.api.GetTrackUseCase
 import com.example.playlistmaker.domain.player.api.MediaPlayerInteractor
 import com.example.playlistmaker.ui.audioPlayer.PlaybackState
 import com.example.playlistmaker.ui.audioPlayer.PlayerScreenState
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class AudioPlayerViewModel(
     private val jsonTrack: String,
@@ -20,9 +24,9 @@ class AudioPlayerViewModel(
     private val playerInteractor: MediaPlayerInteractor,
 ): ViewModel() {
 
-//    init {
-//        loadPlayer()
-//    }
+    init {
+        loadPlayer()
+    }
     companion object {
         fun getViewModelFactory(jsonTrack: String): ViewModelProvider.Factory = viewModelFactory {
             initializer {
@@ -38,6 +42,8 @@ class AudioPlayerViewModel(
         }
     }
 
+    val handler = Handler(Looper.getMainLooper())
+
     private val screenStateLiveData = SingleEventLiveData<Track>()
     private val playbackStateLiveData = MutableLiveData<PlaybackState>()
     fun getScreenStateLiveData(): LiveData<Track> = screenStateLiveData
@@ -47,6 +53,14 @@ class AudioPlayerViewModel(
         val track = getTrackUseCase.execute(jsonTrack)
         screenStateLiveData.value = track
 
+    }
 
+    fun timer() {
+        val timerRunnable = Runnable {
+            SimpleDateFormat("mm:ss",
+                Locale.getDefault()).format(
+                playerInteractor.getCurrentPosition())
+        }
+        handler.postDelayed(timerRunnable, 100)
     }
 }
