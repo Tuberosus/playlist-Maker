@@ -20,14 +20,6 @@ class TrackAdapter(val clickListener: TrackClickListener) : RecyclerView.Adapter
         holder.bind(trackList[position])
 
         holder.itemView.setOnClickListener {
-//            val sharedPrefs = holder.itemView.context.getSharedPreferences(
-//                SETTING_PREFERENCES,
-//                                                                            Context.MODE_PRIVATE)
-//            SearchHistoryImpl(sharedPrefs).apply {
-//                addTrackToHistory(trackList[position])
-//                write(trackSearchHistory)
-//            }
-
             //переход в аудиоплеер
             clickListener.onTrackClick(trackList[position])
         }

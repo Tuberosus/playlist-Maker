@@ -1,4 +1,4 @@
-package com.example.playlistmaker.domain.player
+package com.example.playlistmaker.domain.player.impl
 
 import com.example.playlistmaker.domain.player.api.GetTrack
 import com.example.playlistmaker.domain.player.api.GetTrackUseCase

@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.playlistmaker.domain.models.PlayerState
+import com.example.playlistmaker.domain.player.PlayerState
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.domain.player.api.GetTrackUseCase
 import com.example.playlistmaker.domain.player.api.MediaPlayerInteractor
@@ -24,14 +24,12 @@ class AudioPlayerViewModel(
 ): ViewModel() {
 
     companion object {
-        val PLAYBACK_TOKEN = Any()
         fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val getTrackUseCase = Creator.provideGetTrackUseCase()
                 val playerInteractor = Creator.provideMediaPlayerInteractor()
 
                 AudioPlayerViewModel(
-                    //jsonTrack,
                     getTrackUseCase,
                     playerInteractor
                 )
@@ -44,19 +42,18 @@ class AudioPlayerViewModel(
 
     private val screenStateLiveData = MutableLiveData<Track>()
     private val playbackStateLiveData = MutableLiveData<PlaybackState>()
-    private val playerStateLiveData = MutableLiveData<PlayerState>(currentPlayerState)
+
     fun getScreenStateLiveData(): LiveData<Track> = screenStateLiveData
     fun getPlaybackStateLiveData(): LiveData<PlaybackState> = playbackStateLiveData
-    fun getPlayerStateLiveData(): LiveData<PlayerState> = playerStateLiveData
 
     override fun onCleared() {
         super.onCleared()
         playerInteractor.release()
         stopTimerUpdate()
+        handler.removeCallbacks(runnablePlayerState)
     }
 
     fun onPause() = pause()
-
 
     fun loadPlayer(jsonTrack: String) {
         val track = getTrackUseCase.execute(jsonTrack)

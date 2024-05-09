@@ -1,4 +1,4 @@
-package com.example.playlistmaker.data.api
+package com.example.playlistmaker.data.search
 
 import com.example.playlistmaker.data.search.dto.SongsResponse
 import retrofit2.Call

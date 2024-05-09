@@ -13,8 +13,8 @@ import com.example.playlistmaker.data.settings.impl.SettingsRepositoryImpl
 import com.example.playlistmaker.data.sharing.ExternalNavigator
 import com.example.playlistmaker.data.sharing.impl.ExternalNavigatorImpl
 import com.example.playlistmaker.data.sharing.impl.SharingRepositoryImpl
-import com.example.playlistmaker.domain.player.GetTrackUseCaseImpl
-import com.example.playlistmaker.domain.player.MediaPlayerInteractorImpl
+import com.example.playlistmaker.domain.player.impl.GetTrackUseCaseImpl
+import com.example.playlistmaker.domain.player.impl.MediaPlayerInteractorImpl
 import com.example.playlistmaker.domain.player.api.GetTrack
 import com.example.playlistmaker.domain.player.api.GetTrackUseCase
 import com.example.playlistmaker.domain.player.api.MediaPlayerInteractor

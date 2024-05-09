@@ -14,10 +14,5 @@ class SearchTrackRepositoryImpl(private val networkClient: NetworkClient): Searc
             200 -> Resource.Success((response as SongsResponse).results)
             else -> Resource.Error()
         }
-//        if (response.resultCode == 200) {
-//            return (response as SongsResponse).results
-//        } else {
-//            return ArrayList()
-//        }
     }
 }

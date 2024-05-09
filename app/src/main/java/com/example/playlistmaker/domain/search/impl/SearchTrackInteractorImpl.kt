@@ -14,7 +14,6 @@ class SearchTrackInteractorImpl(private val repository: SearchTrackRepository):
                 is Resource.Success -> { consumer.consume(resource.data) }
                 is Resource.Error -> { consumer.consume(null) }
             }
-//            consumer.consume(repository.getTrackList(expression))
         }
     }
 }

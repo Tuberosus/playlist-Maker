@@ -38,7 +38,6 @@ class SettingsViewModel(
 
     //Sharing
     private val sharingLiveData = MutableLiveData<Unit>()
-    fun getSharingLiveData(): LiveData<Unit> = sharingLiveData
 
 
     fun openTerms() {

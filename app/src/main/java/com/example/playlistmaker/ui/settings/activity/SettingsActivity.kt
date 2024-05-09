@@ -26,11 +26,6 @@ class SettingsActivity : AppCompatActivity() {
             finish()
         }
 
-        // Sharing
-//        settingsViewModel.getSharingLiveData().observe(this) {
-//            startActivity(it)
-//        }
-
         binding.layoutShare.setOnClickListener {
             settingsViewModel.sharingApp()
         }

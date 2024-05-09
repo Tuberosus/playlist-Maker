@@ -27,17 +27,19 @@ class AudioPlayerActivity : AppCompatActivity() {
         binding = ActivityAudioPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val jsTrack = intent.getStringExtra(TRACK_TAG) ?: ""
+        val jsonTrack = intent.getStringExtra(TRACK_TAG) ?: ""
         viewModel = ViewModelProvider(
             this,
             AudioPlayerViewModel.getViewModelFactory()
         )[AudioPlayerViewModel::class.java]
-        viewModel.loadPlayer(jsTrack)
+        viewModel.loadPlayer(jsonTrack)
 
+        //загрузка экрана
         viewModel.getScreenStateLiveData().observe(this) {track ->
             loadTrackInfo(track)
         }
 
+        //работа с воспроизведением
         viewModel.getPlaybackStateLiveData().observe(this) {playbackState ->
             when(playbackState) {
                 PlaybackState.Play -> { play() }
@@ -45,10 +47,6 @@ class AudioPlayerActivity : AppCompatActivity() {
                 PlaybackState.Default -> { setDefaultPlayerState() }
                 is PlaybackState.Timer -> { binding.currentDuration.text = playbackState.time}
             }
-        }
-
-        viewModel.getPlayerStateLiveData().observe(this) {
-
         }
 
         // кнопка назад

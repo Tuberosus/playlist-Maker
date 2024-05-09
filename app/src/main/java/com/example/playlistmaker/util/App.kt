@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.playlistmaker.data.GetSharedPreferences
 
-const val SETTING_PREFERENCES = "setting_preferences"
 const val DARK_THEME = "dark_theme"
 const val SEARCH_HISTORY = "search_history"
 
