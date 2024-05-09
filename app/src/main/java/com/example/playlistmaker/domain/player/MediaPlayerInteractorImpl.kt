@@ -12,6 +12,10 @@ class MediaPlayerInteractorImpl(
         return mediaPlayerManager.state
     }
 
+    override fun setState(state: PlayerState) {
+        mediaPlayerManager.state = state
+    }
+
     override fun getCurrentPosition(): Int {
         return mediaPlayerManager.getCurrentPosition()
     }
@@ -20,8 +24,12 @@ class MediaPlayerInteractorImpl(
         mediaPlayerManager.release()
     }
 
-    override fun preparePlayer(url: String, callback: () -> Unit) {
-        mediaPlayerManager.preparePlayer(url, callback)
+    override fun preparePlayer(url: String,
+//                               callback: () -> Unit
+    ) {
+        mediaPlayerManager.preparePlayer(url,
+//            callback
+        )
     }
     override fun play(callback: () -> Unit) {
         mediaPlayerManager.play()

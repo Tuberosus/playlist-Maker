@@ -1,6 +1,7 @@
 package com.example.playlistmaker.data.player
 
 import android.media.MediaPlayer
+import android.util.Log
 import com.example.playlistmaker.domain.player.api.MediaPlayerManager
 import com.example.playlistmaker.domain.models.PlayerState
 
@@ -11,7 +12,7 @@ class MediaPlayerManagerImpl: MediaPlayerManager {
 
     override fun preparePlayer(
         url: String,
-        callback: () -> Unit
+//        callback: () -> Unit
     ) {
         mediaPlayer.apply {
             setDataSource(url)
@@ -19,7 +20,9 @@ class MediaPlayerManagerImpl: MediaPlayerManager {
             setOnPreparedListener {
                 state = PlayerState.PREPARED
             }
-            //setOnCompletionListener { callback() }
+            setOnCompletionListener {
+                state = PlayerState.DONE
+            }
         }
     }
 

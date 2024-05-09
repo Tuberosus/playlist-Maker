@@ -1,6 +1,6 @@
 package com.example.playlistmaker.domain.search.impl
 
-import com.example.playlistmaker.Utils.Resource
+import com.example.playlistmaker.util.Resource
 import com.example.playlistmaker.domain.search.api.SearchTrackRepository
 import com.example.playlistmaker.domain.search.api.SearchTrackInteractor
 import java.util.concurrent.Executors

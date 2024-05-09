@@ -5,7 +5,7 @@ import com.example.playlistmaker.domain.models.PlayerState
 interface MediaPlayerManager {
     var state: PlayerState
     fun preparePlayer(url: String,
-                      callback: () -> Unit
+//                      callback: () -> Unit
     )
     fun play()
     fun pause()

@@ -1,5 +1,6 @@
-package com.example.playlistmaker.Utils
+package com.example.playlistmaker.util
 
+import android.util.Log
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer

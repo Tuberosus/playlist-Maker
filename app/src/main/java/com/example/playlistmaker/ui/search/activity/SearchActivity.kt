@@ -7,6 +7,7 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -88,6 +89,8 @@ class SearchActivity : AppCompatActivity() {
                 is SearchScreenState.SearchHistoryContent -> {
                     historyArray = state.trackList
                     showHistory(historyArray) }
+
+                else -> {}
             }
         }
 
@@ -329,6 +332,7 @@ class SearchActivity : AppCompatActivity() {
             val intent = Intent(this, AudioPlayerActivity::class.java)
             intent.putExtra(AudioPlayerActivity.TRACK_TAG, jsonTrack)
             startActivity(intent)
+            Log.d("MyTag", jsonTrack.toString())
         }
     }
 

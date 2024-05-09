@@ -1,23 +1,16 @@
 package com.example.playlistmaker.ui.audioPlayer.activity
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.provider.MediaStore.Audio
 import android.util.TypedValue
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.example.playlistmaker.Utils.Creator
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityAudioPlayerBinding
-import com.example.playlistmaker.domain.models.PlayerState
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.ui.audioPlayer.PlaybackState
 import com.example.playlistmaker.ui.audioPlayer.view_model.AudioPlayerViewModel
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 class AudioPlayerActivity : AppCompatActivity() {
 
@@ -27,68 +20,50 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     private lateinit var viewModel:AudioPlayerViewModel
 
-    private lateinit var track: Track
     private lateinit var binding: ActivityAudioPlayerBinding
-
-    private lateinit var handler: Handler
-    private lateinit var runnable: Runnable
-
-    private val playerInteractor = Creator.provideMediaPlayerInteractor()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAudioPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val jsTrack = intent.getStringExtra(TRACK_TAG)
+        val jsTrack = intent.getStringExtra(TRACK_TAG) ?: ""
         viewModel = ViewModelProvider(
             this,
-            AudioPlayerViewModel.getViewModelFactory(jsTrack!!)
+            AudioPlayerViewModel.getViewModelFactory()
         )[AudioPlayerViewModel::class.java]
+        viewModel.loadPlayer(jsTrack)
 
         viewModel.getScreenStateLiveData().observe(this) {track ->
             loadTrackInfo(track)
         }
 
-//        viewModel.getPlaybackStateLiveData().observe(this) {playbackState ->
-//            when(playbackState) {
-//                PlaybackState.Play -> {}
-//                PlaybackState.Pause -> {}
-//                is PlaybackState.Timer -> { binding.currentDuration.text = playbackState.time}
-//            }
-//        }
+        viewModel.getPlaybackStateLiveData().observe(this) {playbackState ->
+            when(playbackState) {
+                PlaybackState.Play -> { play() }
+                PlaybackState.Pause -> { pause() }
+                PlaybackState.Default -> { setDefaultPlayerState() }
+                is PlaybackState.Timer -> { binding.currentDuration.text = playbackState.time}
+            }
+        }
 
-//            viewModel.loadPlayer()
+        viewModel.getPlayerStateLiveData().observe(this) {
 
+        }
 
         // кнопка назад
         binding.buttonBack.setOnClickListener { finish() }
 
-        runnable = runSongTimer()
-        handler = Handler(Looper.getMainLooper())
-
-        // получение выбранного трека
-        val jsonTrack = intent.getStringExtra(TRACK_TAG)
-        track = Creator.provideGetTrackUseCase().execute(jsonTrack!!)
-
-
-
-
-        //загрузка трека в медиаплеер
-        if (!track.previewUrl.isNullOrBlank()) {
-            playerInteractor.preparePlayer(
-                url = track.previewUrl!!,
-                callback = {
-                    handler.removeCallbacks(runnable)
-                    binding.buttonPlay.setImageResource(R.drawable.button_play)
-                    binding.currentDuration.text = getText(R.string.current_duration)
-                    }
-                )
-        }
-
         //обработка нажатия кнопки play
-        binding.buttonPlay.setOnClickListener { playbackControl() }
+        binding.buttonPlay.setOnClickListener {
+            viewModel.playbackControl()
+         }
+    }
 
+    override fun onPause() {
+        super.onPause()
+        viewModel.onPause()
+        pause()
     }
 
     private fun loadTrackInfo(track: Track) {
@@ -119,51 +94,17 @@ class AudioPlayerActivity : AppCompatActivity() {
         }
     }
 
-    private fun playbackControl() {
-        when (playerInteractor.getState()) {
-            PlayerState.PLAYING -> pause()
-            PlayerState.PAUSED -> play()
-            PlayerState.PREPARED -> play()
-            else -> null
-        }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        pause()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        playerInteractor.release()
-        handler.removeCallbacks(runnable)
-    }
-
     private fun play() {
-        playerInteractor.play {
-            binding.buttonPlay.setImageResource(R.drawable.button_pause)
-            handler.post(runnable)
-        }
+        binding.buttonPlay.setImageResource(R.drawable.button_pause)
     }
 
     private fun pause() {
-        playerInteractor.pause {
-            binding.buttonPlay.setImageResource(R.drawable.button_play)
-            handler.removeCallbacks(runnable)
-        }
+        binding.buttonPlay.setImageResource(R.drawable.button_play)
     }
 
-    private fun runSongTimer(): Runnable {
-        return object : Runnable {
-            override fun run() {
-                binding.currentDuration.text = SimpleDateFormat("mm:ss",
-                    Locale.getDefault()).format(
-                    playerInteractor.getCurrentPosition())
-
-                handler.postDelayed(this, 100)
-            }
-
-        }
+    private fun setDefaultPlayerState() {
+        binding.buttonPlay.setImageResource(R.drawable.button_play)
+        binding.currentDuration.text = getText(R.string.current_duration)
     }
 
 }

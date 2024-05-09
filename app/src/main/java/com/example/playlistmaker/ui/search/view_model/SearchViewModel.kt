@@ -8,8 +8,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.playlistmaker.Utils.Creator
-import com.example.playlistmaker.Utils.SingleEventLiveData
+import com.example.playlistmaker.util.Creator
+import com.example.playlistmaker.util.SingleEventLiveData
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.domain.search.api.GetJsonFromTrackUseCase
 import com.example.playlistmaker.domain.search.api.SearchHistoryInteractor
