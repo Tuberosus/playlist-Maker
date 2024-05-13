@@ -34,7 +34,7 @@ class SearchActivity : AppCompatActivity() {
 
     private var inputTextValue = DEF_TEXT
     private var isClickAllowed = true //определение состояния клика для debounce
-    private var historyArray = ArrayList<Track>()
+//    private var historyArray = ArrayList<Track>()
 
 
     private lateinit var adapter: TrackAdapter
@@ -52,7 +52,6 @@ class SearchActivity : AppCompatActivity() {
 
         init() //инициализация view history
 
-        val hasHistory = historyArray?.isNotEmpty() ?: true
 
         viewModel.getState().observe(this) {state ->
             when(state) {
@@ -61,8 +60,9 @@ class SearchActivity : AppCompatActivity() {
                 is SearchScreenState.Empty -> { showEmptyError() }
                 is SearchScreenState.Error -> { showError() }
                 is SearchScreenState.SearchHistoryContent -> {
-                    historyArray.addAll(state.trackList)
-                    showHistory(historyArray) }
+                    hideTracks()
+                    showHistory(state.trackList)
+                }
 
                 else -> {}
             }
@@ -78,6 +78,8 @@ class SearchActivity : AppCompatActivity() {
         historyAdapter = TrackAdapter {
             viewModel.onTrackClick(it)
         }
+
+        //val hasHistory = historyAdapter.trackList.isEmpty()
 
         if (savedInstanceState != null) binding.inputEditText.setText(inputTextValue)
 
@@ -119,12 +121,15 @@ class SearchActivity : AppCompatActivity() {
                     adapter.notifyDataSetChanged()
                 }
 
-                searchHistoryView.visibility = if (binding.inputEditText.hasFocus()
+                val hasHistory = historyAdapter.trackList.isNotEmpty()
+
+                if (binding.inputEditText.hasFocus()
                     && inputTextValue.isEmpty()
                     && hasHistory) {
-                    View.VISIBLE
+                    viewModel.showHistory()
+                    hideTracks()
                 } else {
-                    View.GONE
+                    searchHistoryView.visibility = View.GONE
                 }
 
             }
@@ -144,7 +149,8 @@ class SearchActivity : AppCompatActivity() {
             adapter.trackList.clear()
             clearPlaceholder()
             adapter.notifyDataSetChanged()
-            showHistory(historyArray)
+//            showHistory(historyArray)
+            historyAdapter.notifyDataSetChanged()
         }
 
         //Обновление результатов поиска, если интернет не подключен
@@ -179,6 +185,7 @@ class SearchActivity : AppCompatActivity() {
             historyAdapter.trackList.clear()
             searchHistoryView.visibility = View.GONE
         } else {
+            historyAdapter.trackList.clear()
             historyAdapter.trackList.addAll(trackList)
             searchHistoryView.visibility = View.VISIBLE
         }
@@ -192,9 +199,16 @@ class SearchActivity : AppCompatActivity() {
     private fun showTracks(trackList: List<Track>) {
         adapter.trackList.clear()
         binding.searchProgressbar.visibility= View.GONE
+        binding.trackView.visibility = View.VISIBLE
         adapter.trackList.addAll(trackList)
         binding.trackView.adapter = adapter
         adapter.notifyDataSetChanged()
+    }
+
+    private fun hideTracks() {
+        adapter.trackList.clear()
+        adapter.notifyDataSetChanged()
+        binding.trackView.visibility = View.GONE
     }
 
     private fun showEmptyError() {
