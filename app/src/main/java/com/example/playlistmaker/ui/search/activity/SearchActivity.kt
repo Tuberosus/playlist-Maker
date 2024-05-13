@@ -34,7 +34,7 @@ class SearchActivity : AppCompatActivity() {
 
     private var inputTextValue = DEF_TEXT
     private var isClickAllowed = true //определение состояния клика для debounce
-    private var historyArray: ArrayList<Track>? = null
+    private var historyArray = ArrayList<Track>()
 
 
     private lateinit var adapter: TrackAdapter
@@ -61,7 +61,7 @@ class SearchActivity : AppCompatActivity() {
                 is SearchScreenState.Empty -> { showEmptyError() }
                 is SearchScreenState.Error -> { showError() }
                 is SearchScreenState.SearchHistoryContent -> {
-                    historyArray = state.trackList
+                    historyArray.addAll(state.trackList)
                     showHistory(historyArray) }
 
                 else -> {}
@@ -173,13 +173,13 @@ class SearchActivity : AppCompatActivity() {
         binding.searchProgressbar.visibility = View.VISIBLE
     }
 
-    private fun showHistory(trackList: ArrayList<Track>?) {
+    private fun showHistory(trackList: List<Track>?) {
         recyclerHistory.adapter = historyAdapter
         if (trackList.isNullOrEmpty()) {
             historyAdapter.trackList.clear()
             searchHistoryView.visibility = View.GONE
         } else {
-            historyAdapter.trackList = trackList
+            historyAdapter.trackList.addAll(trackList)
             searchHistoryView.visibility = View.VISIBLE
         }
         historyAdapter.notifyDataSetChanged()
@@ -189,10 +189,10 @@ class SearchActivity : AppCompatActivity() {
         searchHistoryView.visibility = View.GONE
     }
 
-    private fun showTracks(trackList: ArrayList<Track>) {
+    private fun showTracks(trackList: List<Track>) {
         adapter.trackList.clear()
         binding.searchProgressbar.visibility= View.GONE
-        adapter.trackList = trackList
+        adapter.trackList.addAll(trackList)
         binding.trackView.adapter = adapter
         adapter.notifyDataSetChanged()
     }

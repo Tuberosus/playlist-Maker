@@ -2,15 +2,14 @@ package com.example.playlistmaker.ui.audioPlayer.view_model
 
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.playlistmaker.domain.player.PlayerState
 import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.domain.player.PlayerState
 import com.example.playlistmaker.domain.player.api.GetTrackUseCase
 import com.example.playlistmaker.domain.player.api.MediaPlayerInteractor
 import com.example.playlistmaker.ui.audioPlayer.PlaybackState
@@ -24,6 +23,8 @@ class AudioPlayerViewModel(
 ): ViewModel() {
 
     companion object {
+        private const val POST_DELAY = 500L
+        private const val TIMER_DELAY = 200L
         fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val getTrackUseCase = Creator.provideGetTrackUseCase()
@@ -36,6 +37,8 @@ class AudioPlayerViewModel(
             }
         }
     }
+
+    private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
 
     private val handler = Handler(Looper.getMainLooper())
     private var currentPlayerState = PlayerState.DEFAULT
@@ -83,15 +86,14 @@ class AudioPlayerViewModel(
         override fun run() {
             currentPlayerState = playerInteractor.getState()
             if (currentPlayerState == PlayerState.DONE) {
-                Log.d("MyTag", currentPlayerState.toString())
                 playbackControl()
             }
-            handler.postDelayed(this, 500L)
+            handler.postDelayed(this, POST_DELAY)
         }
     }
 
     private fun getAutoCurrentState() {
-        handler.postDelayed(runnablePlayerState, 500L)
+        handler.postDelayed(runnablePlayerState, POST_DELAY)
     }
     fun playbackControl() {
         currentPlayerState = playerInteractor.getState()
@@ -112,16 +114,15 @@ class AudioPlayerViewModel(
 
     private val timer = object : Runnable {
         override fun run() {
-            val time = SimpleDateFormat("mm:ss",
-                Locale.getDefault()).format(
+            val time = dateFormat.format(
                 playerInteractor.getCurrentPosition())
             playbackStateLiveData.postValue(PlaybackState.Timer(time))
-            handler.postDelayed(this, 200)
+            handler.postDelayed(this, TIMER_DELAY)
         }
     }
 
     private fun startTimerUpdate() {
-        handler.postDelayed(timer, 200)
+        handler.postDelayed(timer, TIMER_DELAY)
     }
     private fun stopTimerUpdate() {
         handler.removeCallbacks(timer)
