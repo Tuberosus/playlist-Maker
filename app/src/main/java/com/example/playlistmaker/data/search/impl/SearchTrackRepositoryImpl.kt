@@ -11,7 +11,14 @@ class SearchTrackRepositoryImpl(private val networkClient: NetworkClient): Searc
     override fun getTrackList(expression: String): Resource<ArrayList<Track>> {
         val response = networkClient.doRequest(TrackSearchRequest(expression))
         return when(response.resultCode) {
-            200 -> Resource.Success((response as SongsResponse).results)
+            200 -> Resource.Success(
+                ArrayList(
+                (response as SongsResponse).results.map {
+                Track(it.trackId, it.trackName, it.artistName, it.trackTimeMillis, it.artworkUrl100,
+                    it.collectionName, it.releaseDate, it.primaryGenreName, it.country, it.previewUrl)
+
+                 })
+            )
             else -> Resource.Error()
         }
     }

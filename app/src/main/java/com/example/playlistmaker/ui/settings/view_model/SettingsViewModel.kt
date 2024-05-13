@@ -24,9 +24,7 @@ class SettingsViewModel(
                     Creator.provideSharingInteractor(it)
                 }
 
-                val settingsInteractor = this[APPLICATION_KEY]?.applicationContext?.let {
-                    Creator.providerSettingsInteractor(it)
-                }
+                val settingsInteractor = Creator.providerSettingsInteractor()
 
                 SettingsViewModel(
                     sharingInteractor!!,

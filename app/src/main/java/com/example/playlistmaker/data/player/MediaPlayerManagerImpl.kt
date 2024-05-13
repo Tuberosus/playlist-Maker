@@ -9,10 +9,7 @@ class MediaPlayerManagerImpl: MediaPlayerManager {
     private val mediaPlayer = MediaPlayer()
     override var state = PlayerState.DEFAULT
 
-    override fun preparePlayer(
-        url: String,
-//        callback: () -> Unit
-    ) {
+    override fun preparePlayer(url: String) {
         mediaPlayer.apply {
             setDataSource(url)
             prepareAsync()
