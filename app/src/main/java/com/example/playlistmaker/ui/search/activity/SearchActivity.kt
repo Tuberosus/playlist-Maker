@@ -34,7 +34,6 @@ class SearchActivity : AppCompatActivity() {
 
     private var inputTextValue = DEF_TEXT
     private var isClickAllowed = true //определение состояния клика для debounce
-//    private var historyArray = ArrayList<Track>()
 
 
     private lateinit var adapter: TrackAdapter
@@ -78,8 +77,6 @@ class SearchActivity : AppCompatActivity() {
         historyAdapter = TrackAdapter {
             viewModel.onTrackClick(it)
         }
-
-        //val hasHistory = historyAdapter.trackList.isEmpty()
 
         if (savedInstanceState != null) binding.inputEditText.setText(inputTextValue)
 
@@ -149,7 +146,6 @@ class SearchActivity : AppCompatActivity() {
             adapter.trackList.clear()
             clearPlaceholder()
             adapter.notifyDataSetChanged()
-//            showHistory(historyArray)
             historyAdapter.notifyDataSetChanged()
         }
 
@@ -180,6 +176,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun showHistory(trackList: List<Track>?) {
+        binding.searchProgressbar.visibility = View.GONE
         recyclerHistory.adapter = historyAdapter
         if (trackList.isNullOrEmpty()) {
             historyAdapter.trackList.clear()

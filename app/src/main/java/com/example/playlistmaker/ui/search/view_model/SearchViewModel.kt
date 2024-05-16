@@ -58,19 +58,21 @@ class SearchViewModel(
                 expression = expression,
                 object : SearchTrackInteractor.TrackConsumer{
                     override fun consume(foundTrack: ArrayList<Track>?) {
-                        when {
-                            foundTrack == null -> {
-                                state.postValue(
-                                    SearchScreenState.Error
-                                )
-                            }
-                            foundTrack.isEmpty() -> {
-                                state.postValue(
-                                    SearchScreenState.Empty
-                                )
-                            }
-                            else -> {
-                                state.postValue(SearchScreenState.Content(foundTrack))
+                        if (state.value == SearchScreenState.Loading) {
+                            when {
+                                foundTrack == null -> {
+                                    state.postValue(
+                                        SearchScreenState.Error
+                                    )
+                                }
+                                foundTrack.isEmpty() -> {
+                                    state.postValue(
+                                        SearchScreenState.Empty
+                                    )
+                                }
+                                else -> {
+                                    state.postValue(SearchScreenState.Content(foundTrack))
+                                }
                             }
                         }
                     }
