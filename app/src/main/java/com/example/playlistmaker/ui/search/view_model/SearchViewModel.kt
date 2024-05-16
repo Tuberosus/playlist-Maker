@@ -2,20 +2,15 @@ package com.example.playlistmaker.ui.search.view_model
 
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.playlistmaker.util.Creator
-import com.example.playlistmaker.util.SingleEventLiveData
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.domain.search.api.GetJsonFromTrackUseCase
 import com.example.playlistmaker.domain.search.api.SearchHistoryInteractor
 import com.example.playlistmaker.domain.search.api.SearchTrackInteractor
 import com.example.playlistmaker.ui.search.SearchScreenState
+import com.example.playlistmaker.util.SingleEventLiveData
 
 class SearchViewModel(
     private val searchTrackInteractor: SearchTrackInteractor,
@@ -24,20 +19,6 @@ class SearchViewModel(
     ): ViewModel() {
 
     companion object{
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val searchTrackInteractor = Creator.provideSearchTrackInteractor()
-                val searchHistoryInteractor = Creator.provideSearchHistoryInteractor()
-                val getJsonFromTrackUseCase = Creator.provideGetJsonFromTrackUseCase()
-
-                SearchViewModel(
-                    searchTrackInteractor = searchTrackInteractor,
-                    searchHistoryInteractor = searchHistoryInteractor,
-                    getJsonFromTrackUseCase = getJsonFromTrackUseCase
-                )
-            }
-        }
-
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
         private val SEARCH_REQUEST_TOKEN = Any()
     }

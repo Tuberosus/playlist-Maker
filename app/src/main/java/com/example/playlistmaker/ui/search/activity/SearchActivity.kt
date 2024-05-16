@@ -13,7 +13,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivitySearchBinding
@@ -21,12 +20,11 @@ import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.ui.audioPlayer.activity.AudioPlayerActivity
 import com.example.playlistmaker.ui.search.SearchScreenState
 import com.example.playlistmaker.ui.search.view_model.SearchViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchActivity : AppCompatActivity() {
 
-    private val viewModel by lazy {
-        ViewModelProvider(this, SearchViewModel.getViewModelFactory())[SearchViewModel::class.java]
-    }
+    private val viewModel by viewModel<SearchViewModel>()
 
     private val binding by lazy {
         ActivitySearchBinding.inflate(layoutInflater)

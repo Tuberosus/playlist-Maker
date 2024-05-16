@@ -1,15 +1,13 @@
 package com.example.playlistmaker.data.search.impl
 
+import android.content.SharedPreferences
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.domain.search.api.SearchHistory
-import com.example.playlistmaker.util.Creator
 import com.example.playlistmaker.util.SEARCH_HISTORY
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-class SearchHistoryImpl(): SearchHistory {
-
-    private val sharedPrefs = Creator.getSettingsPrefs()!!
+class SearchHistoryImpl(private val sharedPrefs: SharedPreferences): SearchHistory {
 
     private fun write(trackList: ArrayList<Track>) {
         val json = Gson().toJson(trackList)
