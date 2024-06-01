@@ -9,4 +9,5 @@
     <color name="yp_light_gray">#E6E8EB</color>
     <color name="switch_knob">@color/gray</color>
     <color name="switch_track">@color/yp_light_gray</color>
+    <color name="background">@color/white</color>
 </resources>

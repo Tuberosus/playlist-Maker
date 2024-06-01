@@ -3,7 +3,6 @@ package com.example.playlistmaker.ui.audioPlayer.activity
 import android.os.Bundle
 import android.util.TypedValue
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
@@ -11,6 +10,7 @@ import com.example.playlistmaker.databinding.ActivityAudioPlayerBinding
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.ui.audioPlayer.PlaybackState
 import com.example.playlistmaker.ui.audioPlayer.view_model.AudioPlayerViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class AudioPlayerActivity : AppCompatActivity() {
 
@@ -18,7 +18,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         const val TRACK_TAG = "track"
     }
 
-    private lateinit var viewModel:AudioPlayerViewModel
+    private val viewModel by viewModel<AudioPlayerViewModel>()
 
     private lateinit var binding: ActivityAudioPlayerBinding
 
@@ -28,10 +28,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val jsonTrack = intent.getStringExtra(TRACK_TAG) ?: ""
-        viewModel = ViewModelProvider(
-            this,
-            AudioPlayerViewModel.getViewModelFactory()
-        )[AudioPlayerViewModel::class.java]
+
         viewModel.loadPlayer(jsonTrack)
 
         //загрузка экрана

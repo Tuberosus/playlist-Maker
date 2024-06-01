@@ -5,15 +5,11 @@ import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.domain.player.PlayerState
 import com.example.playlistmaker.domain.player.api.GetTrackUseCase
 import com.example.playlistmaker.domain.player.api.MediaPlayerInteractor
 import com.example.playlistmaker.ui.audioPlayer.PlaybackState
-import com.example.playlistmaker.util.Creator
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -25,17 +21,6 @@ class AudioPlayerViewModel(
     companion object {
         private const val POST_DELAY = 500L
         private const val TIMER_DELAY = 200L
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val getTrackUseCase = Creator.provideGetTrackUseCase()
-                val playerInteractor = Creator.provideMediaPlayerInteractor()
-
-                AudioPlayerViewModel(
-                    getTrackUseCase,
-                    playerInteractor
-                )
-            }
-        }
     }
 
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
