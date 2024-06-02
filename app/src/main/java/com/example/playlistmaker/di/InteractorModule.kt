@@ -45,7 +45,7 @@ val interactorModule = module {
         GetTrackUseCaseImpl(get())
     }
 
-    single<MediaPlayerInteractor> {
+    factory<MediaPlayerInteractor> {
         MediaPlayerInteractorImpl(get())
     }
 }

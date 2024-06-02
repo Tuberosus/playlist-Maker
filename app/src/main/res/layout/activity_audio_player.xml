@@ -42,9 +42,9 @@
         android:layout_marginTop="@dimen/padding_size"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="@id/left_guideline"
-        android:background="@null"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:src="@drawable/arrow_back"
-        android:foreground="?attr/selectableItemBackgroundBorderless"/>
+        />
 
     <ImageView
         android:id="@+id/artworkUrl100"

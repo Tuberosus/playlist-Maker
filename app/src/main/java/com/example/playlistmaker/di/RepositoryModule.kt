@@ -49,7 +49,7 @@ val repositoryModule = module {
     }
 
     // Player
-    single<MediaPlayerManager> {
+    factory<MediaPlayerManager> {
         MediaPlayerManagerImpl(get())
     }
 
