@@ -7,25 +7,12 @@
     android:orientation="vertical"
     android:background="@color/background"
     android:padding="@dimen/padding_size"
-    tools:context=".ui.search.activity.SearchActivity">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/gap1"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/imageBackAction"
-            style="@style/PanelHeader"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/arrow_back" />
+    tools:context=".ui.search.fragments.SearchFragment">
 
         <TextView
             style="@style/PanelHeader"
-            android:paddingStart="@dimen/padding_size"
+            android:layout_marginBottom="@dimen/gap1"
             android:text="@string/search" />
-    </LinearLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -83,23 +70,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-        <ImageView
-            android:id="@+id/iv_placeholder"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/input_height"
-            android:layout_gravity="center_horizontal"/>
-        <TextView style="@style/SearchErrorAndHistory"
-            android:id="@+id/text_error"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="?attr/colorOnSecondary" />
-        <Button style="@style/RefreshButtonSearch"
-            android:id="@+id/btn_refresh"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:text="@string/refresh" />
+            <ImageView
+                android:id="@+id/iv_placeholder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/input_height"
+                android:layout_gravity="center_horizontal"/>
+            <TextView style="@style/SearchErrorAndHistory"
+                android:id="@+id/text_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/colorOnSecondary" />
+            <Button style="@style/RefreshButtonSearch"
+                android:id="@+id/btn_refresh"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:text="@string/refresh" />
 
         </LinearLayout>
         <!--/////////////////////////////////////////////////-->

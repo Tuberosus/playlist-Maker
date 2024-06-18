@@ -7,6 +7,8 @@
     <dimen name="small_text">11sp</dimen>
     <dimen name="gap1">26dp</dimen>
     <dimen name="gap2">20dp</dimen>
+    <dimen name="padding_header_start">12dp</dimen>
+    <dimen name="padding_header_top">10dp</dimen>
     <dimen name="padding_size">16dp</dimen>
     <dimen name="icon_padding">8dp</dimen>
     <dimen name="input_height">52dp</dimen>
@@ -28,4 +30,7 @@
     <dimen name="btn_margin_ic">46dp</dimen>
     <dimen name="top_margin_btn">24dp</dimen>
     <dimen name="text_size_media_ph">19sp</dimen>
+
+    <!--  bottom navigation  -->
+    <dimen name="bottom_nav_text_size">12sp</dimen>
 </resources>

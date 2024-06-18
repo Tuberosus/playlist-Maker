@@ -1,36 +1,23 @@
 package com.example.playlistmaker.ui.main
 
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.playlistmaker.ui.media.activity.MediaActivity
+import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
 import com.example.playlistmaker.R
-import com.example.playlistmaker.ui.settings.activity.SettingsActivity
-import com.example.playlistmaker.ui.search.activity.SearchActivity
-import com.google.android.material.button.MaterialButton
+import com.example.playlistmaker.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+
+    private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(binding.root)
 
-        val searchButton = findViewById<MaterialButton>(R.id.search)
-        val mediaButton = findViewById<MaterialButton>(R.id.media)
-        val settingsButton = findViewById<MaterialButton>(R.id.settings)
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.container_view) as NavHostFragment
+        val navController = navHostFragment.navController
 
-        searchButton.setOnClickListener {
-            val displayIntent = Intent(this, SearchActivity::class.java)
-            startActivity(displayIntent)
-        }
-
-        mediaButton.setOnClickListener {
-            val displayIntent = Intent(this, MediaActivity::class.java)
-            startActivity(displayIntent)
-        }
-
-        settingsButton.setOnClickListener {
-            val displayIntent = Intent(this, SettingsActivity::class.java)
-            startActivity(displayIntent)
-        }
+        val bottomNavigationView = binding.bottomNavigationView
+        bottomNavigationView.setupWithNavController(navController)
     }
 }

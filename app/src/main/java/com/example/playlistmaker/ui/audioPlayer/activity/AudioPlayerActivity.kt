@@ -4,6 +4,11 @@ import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
+import androidx.navigation.NavArgs
+import androidx.navigation.NavArgument
+import androidx.navigation.navArgs
+import androidx.navigation.navArgument
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
@@ -34,17 +39,28 @@ class AudioPlayerActivity : AppCompatActivity() {
         viewModel.loadPlayer(jsonTrack)
 
         //загрузка экрана
-        viewModel.getScreenStateLiveData().observe(this) {track ->
+        viewModel.getScreenStateLiveData().observe(this) { track ->
             loadTrackInfo(track)
         }
 
         //работа с воспроизведением
-        viewModel.getPlaybackStateLiveData().observe(this) {playbackState ->
-            when(playbackState) {
-                PlaybackState.Play -> { play() }
-                PlaybackState.Pause -> { pause() }
-                PlaybackState.Default -> { setDefaultPlayerState() }
-                is PlaybackState.Timer -> { binding.currentDuration.text = playbackState.time}
+        viewModel.getPlaybackStateLiveData().observe(this) { playbackState ->
+            when (playbackState) {
+                PlaybackState.Play -> {
+                    play()
+                }
+
+                PlaybackState.Pause -> {
+                    pause()
+                }
+
+                PlaybackState.Default -> {
+                    setDefaultPlayerState()
+                }
+
+                is PlaybackState.Timer -> {
+                    binding.currentDuration.text = playbackState.time
+                }
             }
         }
 
@@ -54,7 +70,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         //обработка нажатия кнопки play
         binding.buttonPlay.setOnClickListener {
             viewModel.playbackControl()
-         }
+        }
     }
 
     override fun onPause() {
@@ -71,9 +87,11 @@ class AudioPlayerActivity : AppCompatActivity() {
             .placeholder(R.drawable.ic_album_default)
             .transform(
                 RoundedCorners(
-                    TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                    TypedValue.applyDimension(
+                        TypedValue.COMPLEX_UNIT_DIP,
                         resources.getDimension(R.dimen.artwork_radius),
-                        resources.displayMetrics).toInt()
+                        resources.displayMetrics
+                    ).toInt()
                 )
             )
             .into(binding.artworkUrl100)
@@ -83,9 +101,9 @@ class AudioPlayerActivity : AppCompatActivity() {
             trackName.text = track.trackName
             artistName.text = track.artistName
             currentDuration.text = "00:00" // заглушка время проигрывания
-            duration.text =  track.trackTime
+            duration.text = track.trackTime
             album.text = track.collectionName
-            year.text = track.releaseDate.substring(0,4)
+            year.text = track.releaseDate.substring(0, 4)
             genre.text = track.primaryGenreName
             country.text = track.country
         }
