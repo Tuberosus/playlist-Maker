@@ -15,7 +15,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentSearchBinding
@@ -58,7 +57,7 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        init() //инициализация view history
+        searchHistoryViewInit(binding.root) //инициализация view history
 
         viewModel.getState().observe(viewLifecycleOwner) { state ->
             when (state) {
@@ -264,10 +263,10 @@ class SearchFragment : Fragment() {
         }
     }
 
-    private fun init() {
-        searchHistoryView = requireActivity().findViewById(R.id.search_history)
-        recyclerHistory = requireActivity().findViewById(R.id.rv_track_search_history)
-        clearSearchHistoryBtn = requireActivity().findViewById(R.id.btn_clear_search_history)
+    private fun searchHistoryViewInit(view: View) {
+        searchHistoryView = view.findViewById(R.id.search_history)
+        recyclerHistory = view.findViewById(R.id.rv_track_search_history)
+        clearSearchHistoryBtn = view.findViewById(R.id.btn_clear_search_history)
     }
 
     companion object {
