@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:forceDarkAllowed="true"
+    android:foregroundTint="#4CAF50"
+    android:orientation="vertical"
+    android:padding="@dimen/padding_size"
+    tools:context=".ui.settings.fragments.SettingsFragment">
+
+    <TextView
+        style="@style/PanelHeader"
+        android:layout_marginBottom="@dimen/top_margin_btn"
+        android:text="@string/settings" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/themeSwitcher"
+        style="@style/SettingsActivityText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_size"
+        android:paddingBottom="@dimen/gap1"
+        android:text="@string/dark_theme"
+        app:thumbTint="@color/switch_knob"
+        app:trackTint="@color/switch_track" />
+
+    <FrameLayout
+        android:id="@+id/layoutShare"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foreground="?attr/selectableItemBackground"
+        android:paddingBottom="@dimen/gap1">
+
+        <TextView
+            style="@style/SettingsActivityText"
+            android:text="@string/share_app" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:src="@drawable/share" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/layoutSupport"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foreground="?attr/selectableItemBackground"
+        android:paddingBottom="@dimen/gap1">
+
+        <TextView
+            style="@style/SettingsActivityText"
+            android:text="@string/support" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:src="@drawable/support" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/layoutUserAgreement"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foreground="?attr/selectableItemBackground"
+        android:paddingBottom="@dimen/gap1">
+
+        <TextView
+            style="@style/SettingsActivityText"
+            android:text="@string/user_agreement" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:src="@drawable/arrow_forward" />
+    </FrameLayout>
+
+</LinearLayout>

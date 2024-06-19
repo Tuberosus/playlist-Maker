@@ -86,6 +86,13 @@
         <item name="android:fontFamily">@font/ys_text_regular</item>
         <item name="android:textColor">?attr/colorOnSecondary</item>
     </style>
+
+    <style name="BottomNavigationViewTextStyle">
+        <item name="android:fontFamily">@font/ys_text_regular</item>
+        <item name="android:textSize">@dimen/bottom_nav_text_size</item>
+        <item name="itemTextColor">?attr/colorOnSecondary</item>
+    </style>
+
 </resources>
 
 <!--parent="Widget.MaterialComponents.Button.UnelevatedButton"-->
