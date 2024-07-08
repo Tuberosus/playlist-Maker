@@ -15,9 +15,13 @@ class MediaPlayerManagerImpl(private val mediaPlayer: MediaPlayer) : MediaPlayer
             setOnPreparedListener {
                 state = PlayerState.PREPARED
             }
-            setOnCompletionListener {
-                state = PlayerState.DONE
-            }
+        }
+    }
+
+    override fun onCompletionWork(callback :()->Unit) {
+        mediaPlayer.setOnCompletionListener {
+            state = PlayerState.DONE
+            callback()
         }
     }
 
@@ -37,5 +41,9 @@ class MediaPlayerManagerImpl(private val mediaPlayer: MediaPlayer) : MediaPlayer
 
     override fun release() {
         mediaPlayer.release()
+    }
+
+    override fun isPlaying(): Boolean {
+        return mediaPlayer.isPlaying
     }
 }

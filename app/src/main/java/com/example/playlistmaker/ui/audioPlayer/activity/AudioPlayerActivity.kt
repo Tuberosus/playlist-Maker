@@ -1,18 +1,11 @@
 package com.example.playlistmaker.ui.audioPlayer.activity
 
 import android.os.Bundle
-import android.util.Log
 import android.util.TypedValue
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.bundleOf
-import androidx.navigation.NavArgs
-import androidx.navigation.NavArgument
-import androidx.navigation.navArgs
-import androidx.navigation.navArgument
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
-import com.example.playlistmaker.data.player.MediaPlayerManagerImpl
 import com.example.playlistmaker.databinding.ActivityAudioPlayerBinding
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.ui.audioPlayer.PlaybackState
@@ -46,8 +39,8 @@ class AudioPlayerActivity : AppCompatActivity() {
         //работа с воспроизведением
         viewModel.getPlaybackStateLiveData().observe(this) { playbackState ->
             when (playbackState) {
-                PlaybackState.Play -> {
-                    play()
+                is PlaybackState.Play -> {
+                    play(playbackState.time)
                 }
 
                 PlaybackState.Pause -> {
@@ -56,10 +49,6 @@ class AudioPlayerActivity : AppCompatActivity() {
 
                 PlaybackState.Default -> {
                     setDefaultPlayerState()
-                }
-
-                is PlaybackState.Timer -> {
-                    binding.currentDuration.text = playbackState.time
                 }
             }
         }
@@ -109,8 +98,9 @@ class AudioPlayerActivity : AppCompatActivity() {
         }
     }
 
-    private fun play() {
+    private fun play(time: String) {
         binding.buttonPlay.setImageResource(R.drawable.button_pause)
+        binding.currentDuration.text = time
     }
 
     private fun pause() {
