@@ -3,10 +3,9 @@ package com.example.playlistmaker.ui.search.fragments
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +14,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentSearchBinding
@@ -22,6 +22,7 @@ import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.ui.audioPlayer.activity.AudioPlayerActivity
 import com.example.playlistmaker.ui.search.SearchScreenState
 import com.example.playlistmaker.ui.search.view_model.SearchViewModel
+import com.example.playlistmaker.util.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
@@ -33,17 +34,16 @@ class SearchFragment : Fragment() {
     private val viewModel by viewModel<SearchViewModel>()
 
     private var inputTextValue = DEF_TEXT
-    private var isClickAllowed = true //определение состояния клика для debounce
 
+    private lateinit var onTrackClickDebounce: (Track) -> Unit
 
     private lateinit var adapter: TrackAdapter
     private lateinit var historyAdapter: TrackAdapter
 
-    private val handler = Handler(Looper.getMainLooper())
-
     private lateinit var searchHistoryView: LinearLayout
     private lateinit var recyclerHistory: RecyclerView
     private lateinit var clearSearchHistoryBtn: Button
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -86,15 +86,23 @@ class SearchFragment : Fragment() {
             }
         }
 
+        onTrackClickDebounce = debounce<Track>(
+            CLICK_DEBOUNCE_DELAY,
+            viewLifecycleOwner.lifecycleScope,
+            false
+        ) { track ->
+            viewModel.onTrackClick(track)
+        }
+
         viewModel.getTrackClickEvent().observe(viewLifecycleOwner) { track ->
             openPlayer(track)
         }
 
         adapter = TrackAdapter {
-            viewModel.onTrackClick(it)
+            onTrackClickDebounce(it)
         }
         historyAdapter = TrackAdapter {
-            viewModel.onTrackClick(it)
+            onTrackClickDebounce(it)
         }
 
         if (savedInstanceState != null) binding.inputEditText.setText(inputTextValue)
@@ -103,7 +111,10 @@ class SearchFragment : Fragment() {
         //Выполнение запроса на поиск треков с кнопки на клавиатуре
         binding.inputEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                viewModel.loadData(inputTextValue)
+                loadingSearch()
+                viewModel.searchDebounce(
+                    changedText = inputTextValue
+                )
                 true
             }
             false
@@ -158,7 +169,8 @@ class SearchFragment : Fragment() {
         binding.clearIcon.setOnClickListener {
             binding.clearIcon.visibility = View.GONE
             binding.inputEditText.setText("")
-            val inputMethodManager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            val inputMethodManager =
+                requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMethodManager?.hideSoftInputFromWindow(binding.inputEditText.windowToken, 0)
             adapter.trackList.clear()
             clearPlaceholder()
@@ -187,6 +199,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun loadingSearch() {
+        Log.d("MyTag", "loading")
         clearPlaceholder()
         hideHistory()
         binding.searchProgressbar.visibility = View.VISIBLE
@@ -211,8 +224,9 @@ class SearchFragment : Fragment() {
     }
 
     private fun showTracks(trackList: List<Track>) {
+        Log.d("MyTag", "show track")
         adapter.trackList.clear()
-        binding.searchProgressbar.visibility= View.GONE
+        binding.searchProgressbar.visibility = View.GONE
         binding.trackView.visibility = View.VISIBLE
         adapter.trackList.addAll(trackList)
         binding.trackView.adapter = adapter
@@ -246,21 +260,10 @@ class SearchFragment : Fragment() {
         binding.btnRefresh.visibility = View.GONE
     }
 
-    private fun clickDebounce(): Boolean {
-        val current = isClickAllowed
-        if (isClickAllowed) {
-            isClickAllowed = false
-            handler.postDelayed({isClickAllowed = true}, CLICK_DEBOUNCE_DELAY)
-        }
-        return current
-    }
-
     private fun openPlayer(jsonTrack: String) {
-        if (clickDebounce()) {
             val intent = Intent(requireContext(), AudioPlayerActivity::class.java)
             intent.putExtra(AudioPlayerActivity.TRACK_TAG, jsonTrack)
             startActivity(intent)
-        }
     }
 
     private fun searchHistoryViewInit(view: View) {

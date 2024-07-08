@@ -1,5 +1,6 @@
 package com.example.playlistmaker.domain.player.api
 
+import android.media.MediaPlayer
 import com.example.playlistmaker.domain.player.PlayerState
 
 interface MediaPlayerInteractor {
@@ -7,9 +8,9 @@ interface MediaPlayerInteractor {
     fun setState(state: PlayerState)
     fun getCurrentPosition(): Int
     fun release()
-    fun preparePlayer(url: String,
-//                      callback: ()-> Unit
-                    )
-    fun play(callback: ()-> Unit)
-    fun pause(callback: ()-> Unit)
+    fun preparePlayer(url: String)
+    fun play()
+    fun pause()
+    fun isPlaying(): Boolean
+    fun onCompletionWork(callback :()->Unit)
 }

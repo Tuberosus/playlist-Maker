@@ -1,16 +1,17 @@
 package com.example.playlistmaker.ui.search.view_model
 
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.domain.search.api.GetJsonFromTrackUseCase
 import com.example.playlistmaker.domain.search.api.SearchHistoryInteractor
 import com.example.playlistmaker.domain.search.api.SearchTrackInteractor
 import com.example.playlistmaker.ui.search.SearchScreenState
 import com.example.playlistmaker.util.SingleEventLiveData
+import com.example.playlistmaker.util.debounce
+import kotlinx.coroutines.launch
 
 class SearchViewModel(
     private val searchTrackInteractor: SearchTrackInteractor,
@@ -20,10 +21,9 @@ class SearchViewModel(
 
     companion object{
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
-        private val SEARCH_REQUEST_TOKEN = Any()
     }
 
-    private val handler = Handler(Looper.getMainLooper())
+    private var latestSearchText: String? = null
 
     private val trackClickEvent = SingleEventLiveData<String>()
     private val state = MutableLiveData<SearchScreenState>()
@@ -35,10 +35,10 @@ class SearchViewModel(
 
             state.value = SearchScreenState.Loading
 
-            searchTrackInteractor.searchTrack(
-                expression = expression,
-                object : SearchTrackInteractor.TrackConsumer{
-                    override fun consume(foundTrack: ArrayList<Track>?) {
+            viewModelScope.launch {
+                searchTrackInteractor
+                    .searchTrack(expression = expression)
+                    .collect { foundTrack ->
                         if (state.value == SearchScreenState.Loading) {
                             when {
                                 foundTrack == null -> {
@@ -57,22 +57,21 @@ class SearchViewModel(
                             }
                         }
                     }
-                }
-            )
+            }
         }
 
     }
 
+    private val tracksSearchDebounce =
+        debounce<String>(SEARCH_DEBOUNCE_DELAY, viewModelScope, true) { changedText ->
+            loadData(changedText)
+        }
+
     fun searchDebounce(changedText: String) {
-        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
-
-        val searchRunnable = Runnable { loadData(changedText) }
-
-        handler.postDelayed(
-            searchRunnable,
-            SEARCH_REQUEST_TOKEN,
-            SEARCH_DEBOUNCE_DELAY
-        )
+        if (latestSearchText != changedText) {
+            latestSearchText = changedText
+            tracksSearchDebounce(changedText)
+        }
     }
 
     fun onTrackClick(track: Track) {

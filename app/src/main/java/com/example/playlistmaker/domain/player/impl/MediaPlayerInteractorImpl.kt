@@ -1,8 +1,8 @@
 package com.example.playlistmaker.domain.player.impl
 
+import com.example.playlistmaker.domain.player.PlayerState
 import com.example.playlistmaker.domain.player.api.MediaPlayerInteractor
 import com.example.playlistmaker.domain.player.api.MediaPlayerManager
-import com.example.playlistmaker.domain.player.PlayerState
 
 class MediaPlayerInteractorImpl(
     private val mediaPlayerManager: MediaPlayerManager
@@ -27,13 +27,18 @@ class MediaPlayerInteractorImpl(
     override fun preparePlayer(url: String) {
         mediaPlayerManager.preparePlayer(url)
     }
-    override fun play(callback: () -> Unit) {
+    override fun play() {
         mediaPlayerManager.play()
-        callback()
     }
 
-    override fun pause(callback: () -> Unit) {
+    override fun pause() {
         mediaPlayerManager.pause()
-        callback()
+    }
+    override fun isPlaying(): Boolean {
+        return mediaPlayerManager.isPlaying()
+    }
+
+    override fun onCompletionWork(callback: () -> Unit) {
+        mediaPlayerManager.onCompletionWork { callback() }
     }
 }

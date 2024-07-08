@@ -8,34 +8,42 @@ import com.example.playlistmaker.data.search.ITunesAPI
 import com.example.playlistmaker.data.search.NetworkClient
 import com.example.playlistmaker.data.search.dto.Response
 import com.example.playlistmaker.data.search.dto.TrackSearchRequest
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.IOException
 
 class RetrofitNetworkClient(
     private val application: Application,
     private val iTunesService: ITunesAPI
-    ): NetworkClient {
+) : NetworkClient {
 
-    override fun doRequest(dto: Any): Response {
+    override suspend fun doRequest(dto: Any): Response {
         if (isConnected() == false) {
             return Response().apply { resultCode = -1 }
         }
-        try {
-            if (dto is TrackSearchRequest) {
-                val response = iTunesService.search(dto.expression).execute()
-                val body = response.body() ?: Response()
-                return body.apply { resultCode = response.code() }
-            } else {
-                return Response().apply { resultCode = 400 }
+
+        if (dto !is TrackSearchRequest) {
+            return Response().apply { resultCode = 400 }
+        }
+
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = iTunesService.search(dto.expression)
+                response.apply { resultCode = 200 }
+            } catch (e: IOException) {
+                Response().apply { resultCode = -2 }
+            } catch (e: Throwable) {
+                Response().apply { resultCode = 500 }
             }
-        } catch (e: IOException) {
-            return Response().apply { resultCode = -2 }
         }
     }
 
     private fun isConnected(): Boolean {
         val connectivityManager = application.getSystemService(
-            Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val capabilities =  connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+            Context.CONNECTIVITY_SERVICE
+        ) as ConnectivityManager
+        val capabilities =
+            connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
         if (capabilities != null) {
             when {
                 capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> return true
