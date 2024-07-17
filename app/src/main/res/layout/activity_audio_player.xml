@@ -121,7 +121,7 @@
             app:layout_constraintBottom_toBottomOf="@id/buttonPlay"
             app:layout_constraintTop_toTopOf="@id/buttonPlay"
             app:layout_constraintEnd_toEndOf="@id/right_inner_guideline"
-            android:src="@drawable/button_like"/>
+            tools:src="@drawable/button_like_inactive"/>
 
         <TextView
             android:id="@+id/currentDuration"

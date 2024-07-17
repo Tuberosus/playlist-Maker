@@ -1,5 +1,7 @@
 package com.example.playlistmaker.di
 
+import com.example.playlistmaker.data.converters.TrackDbConvertor
+import com.example.playlistmaker.data.media.FavoriteTrackRepositoryImpl
 import com.example.playlistmaker.data.player.GetTrackImpl
 import com.example.playlistmaker.data.player.MediaPlayerManagerImpl
 import com.example.playlistmaker.data.search.impl.GetJsonFromTrackImpl
@@ -8,6 +10,7 @@ import com.example.playlistmaker.data.search.impl.SearchTrackRepositoryImpl
 import com.example.playlistmaker.data.settings.impl.SettingsRepositoryImpl
 import com.example.playlistmaker.data.sharing.impl.ExternalNavigatorImpl
 import com.example.playlistmaker.data.sharing.impl.SharingRepositoryImpl
+import com.example.playlistmaker.domain.db.FavoriteTrackRepository
 import com.example.playlistmaker.domain.player.api.GetTrack
 import com.example.playlistmaker.domain.player.api.MediaPlayerManager
 import com.example.playlistmaker.domain.search.api.GetJsonFromTrack
@@ -55,5 +58,13 @@ val repositoryModule = module {
 
     single<GetTrack> {
         GetTrackImpl()
+    }
+
+    factory {
+        TrackDbConvertor()
+    }
+
+    single<FavoriteTrackRepository> {
+        FavoriteTrackRepositoryImpl(get(), get())
     }
 }

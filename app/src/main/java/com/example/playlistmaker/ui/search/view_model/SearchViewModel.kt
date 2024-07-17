@@ -81,6 +81,7 @@ class SearchViewModel(
         val json = getJsonFromTrackUseCase.execute(track)
         trackClickEvent.postValue(json)
     }
+
     fun showHistory() {
         val trackList = searchHistoryInteractor.read()
         state.postValue(

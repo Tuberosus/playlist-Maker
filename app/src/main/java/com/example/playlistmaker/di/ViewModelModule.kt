@@ -18,12 +18,12 @@ val viewModelModule = module {
         SearchViewModel(get(), get(), get())
     }
 
-    viewModel {
-        AudioPlayerViewModel(get(), get())
+    viewModel { (jsonTrack: String) ->
+        AudioPlayerViewModel(get(), get(), get(), jsonTrack)
     }
 
     viewModel {
-        FavoriteTrackViewModel()
+        FavoriteTrackViewModel(get(), get())
     }
 
     viewModel {

@@ -1,9 +1,13 @@
-package com.example.playlistmaker.domain.models
+package com.example.playlistmaker.data.db.entity
 
-import java.text.SimpleDateFormat
-import java.util.Locale
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.example.playlistmaker.data.db.dao.TrackDao
 
-data class Track (
+@Entity(tableName = TrackDao.TABLE_NAME)
+data class TrackEntity(
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
     val trackId: Int,
     val trackName: String, // Название композиции
     val artistName: String, // Имя исполнителя
@@ -13,10 +17,5 @@ data class Track (
     val releaseDate: String, // Год релиза трека
     val primaryGenreName: String, // Жанр трека
     val country: String, // Страна исполнителя
-    val previewUrl: String?, // аудио трека
-    val inFavorite: Boolean = false,
-) {
-    val trackTime: String get() = SimpleDateFormat("mm:ss", Locale.getDefault())
-        .format(trackTimeMillis.toInt())
-    val artworkUrl512 get() = artworkUrl100.replaceAfterLast('/', "512x512bb.jpg")
-}
+    val previewUrl: String? // аудио трека
+)

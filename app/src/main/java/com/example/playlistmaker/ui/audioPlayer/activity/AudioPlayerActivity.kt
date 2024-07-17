@@ -11,6 +11,7 @@ import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.ui.audioPlayer.PlaybackState
 import com.example.playlistmaker.ui.audioPlayer.view_model.AudioPlayerViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class AudioPlayerActivity : AppCompatActivity() {
 
@@ -18,7 +19,11 @@ class AudioPlayerActivity : AppCompatActivity() {
         const val TRACK_TAG = "track"
     }
 
-    private val viewModel by viewModel<AudioPlayerViewModel>()
+    private val jsonTrack by lazy { intent.getStringExtra(TRACK_TAG) ?: "" }
+
+    private val viewModel by viewModel<AudioPlayerViewModel> {
+        parametersOf(jsonTrack)
+    }
 
     private lateinit var binding: ActivityAudioPlayerBinding
 
@@ -27,9 +32,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         binding = ActivityAudioPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val jsonTrack = intent.getStringExtra(TRACK_TAG) ?: ""
-
-        viewModel.loadPlayer(jsonTrack)
+        viewModel.loadPlayer()
 
         //загрузка экрана
         viewModel.getScreenStateLiveData().observe(this) { track ->
@@ -53,12 +56,20 @@ class AudioPlayerActivity : AppCompatActivity() {
             }
         }
 
+        viewModel.getIsLikeLiveData().observe(this) { isLike ->
+            setLike(isLike)
+        }
+
         // кнопка назад
         binding.buttonBack.setOnClickListener { finish() }
 
         //обработка нажатия кнопки play
         binding.buttonPlay.setOnClickListener {
             viewModel.playbackControl()
+        }
+
+        binding.buttonLike.setOnClickListener {
+            viewModel.clickOnLike()
         }
     }
 
@@ -110,6 +121,16 @@ class AudioPlayerActivity : AppCompatActivity() {
     private fun setDefaultPlayerState() {
         binding.buttonPlay.setImageResource(R.drawable.button_play)
         binding.currentDuration.text = getText(R.string.current_duration)
+    }
+
+    private fun setLike(isLike: Boolean) {
+        binding.buttonLike.setImageResource(
+            if (isLike) {
+                R.drawable.button_like_active
+            } else {
+                R.drawable.button_like_inactive
+            }
+        )
     }
 
 }
