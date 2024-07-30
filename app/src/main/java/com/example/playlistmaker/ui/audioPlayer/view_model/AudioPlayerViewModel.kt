@@ -5,11 +5,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.domain.db.FavoriteTrackInteractor
+import com.example.playlistmaker.domain.media.api.PlaylistInteractor
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.domain.player.PlayerState
 import com.example.playlistmaker.domain.player.api.GetTrackUseCase
 import com.example.playlistmaker.domain.player.api.MediaPlayerInteractor
 import com.example.playlistmaker.ui.audioPlayer.PlaybackState
+import com.example.playlistmaker.ui.audioPlayer.BottomSheetScreenState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -21,12 +23,9 @@ class AudioPlayerViewModel(
     private val getTrackUseCase: GetTrackUseCase,
     private val playerInteractor: MediaPlayerInteractor,
     private val favoriteTrackInteractor: FavoriteTrackInteractor,
-    private val jsonTrack: String
+    private val jsonTrack: String,
+    private val playlistInteractor: PlaylistInteractor
 ) : ViewModel() {
-
-    init {
-        isInFavorite()
-    }
 
     companion object {
         private const val TIMER_DELAY = 300L
@@ -43,10 +42,20 @@ class AudioPlayerViewModel(
     private val screenStateLiveData = MutableLiveData<Track>()
     private val playbackStateLiveData = MutableLiveData<PlaybackState>()
     private val isLikeLiveData = MutableLiveData<Boolean>()
+    private val playlistLiveData = MutableLiveData<BottomSheetScreenState>()
 
     fun getScreenStateLiveData(): LiveData<Track> = screenStateLiveData
     fun getPlaybackStateLiveData(): LiveData<PlaybackState> = playbackStateLiveData
     fun getIsLikeLiveData(): LiveData<Boolean> = isLikeLiveData
+    fun getBottomSheetState(): LiveData<BottomSheetScreenState> = playlistLiveData
+
+
+    init {
+        isInFavorite()
+        getPlaylistState()
+        loadPlayer()
+    }
+
 
     override fun onCleared() {
         super.onCleared()
@@ -124,10 +133,22 @@ class AudioPlayerViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             val trackId = getTrackUseCase.execute(jsonTrack).trackId
             favoriteTrackInteractor.getTrackIdInFavorite()
-            .collect { ids ->
-                isFavorite = ids.contains(trackId)
-                isLikeLiveData.postValue(isFavorite)
-            }
+                .collect { ids ->
+                    isFavorite = ids.contains(trackId)
+                    isLikeLiveData.postValue(isFavorite)
+                }
+        }
+    }
+
+    fun getPlaylistState() {
+        playlistLiveData.postValue(BottomSheetScreenState.Loading)
+        viewModelScope.launch(Dispatchers.IO) {
+            playlistInteractor.getPlaylists()
+                .collect { playlist ->
+                    playlistLiveData.postValue(
+                        BottomSheetScreenState.Content(playlist)
+                    )
+                }
         }
     }
 

@@ -10,4 +10,6 @@
     <color name="switch_knob">@color/gray</color>
     <color name="switch_track">@color/yp_light_gray</color>
     <color name="background">@color/white</color>
+    <color name="input_text_stroke">#AEAFB4</color>
+    <color name="rounder_color">@color/yp_light_gray</color>
 </resources>

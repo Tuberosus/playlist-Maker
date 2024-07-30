@@ -41,4 +41,8 @@
         <item name="android:layout_marginTop">@dimen/padding_size</item>
         <item name="android:textColor">@color/yp_black</item>
     </style>
+
+    <style name="PopUpDialog" parent="Theme.AppCompat.DayNight.Dialog.Alert">
+        <item name="colorOnPrimary">@color/white</item>
+    </style>
 </resources>

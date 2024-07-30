@@ -1,7 +1,10 @@
 package com.example.playlistmaker.di
 
+import com.example.playlistmaker.data.converters.PlaylistDbConvertor
 import com.example.playlistmaker.data.converters.TrackDbConvertor
+import com.example.playlistmaker.data.media.ExternalFilesNavigatorImpl
 import com.example.playlistmaker.data.media.FavoriteTrackRepositoryImpl
+import com.example.playlistmaker.data.media.PlaylistRepositoryImpl
 import com.example.playlistmaker.data.player.GetTrackImpl
 import com.example.playlistmaker.data.player.MediaPlayerManagerImpl
 import com.example.playlistmaker.data.search.impl.GetJsonFromTrackImpl
@@ -11,6 +14,8 @@ import com.example.playlistmaker.data.settings.impl.SettingsRepositoryImpl
 import com.example.playlistmaker.data.sharing.impl.ExternalNavigatorImpl
 import com.example.playlistmaker.data.sharing.impl.SharingRepositoryImpl
 import com.example.playlistmaker.domain.db.FavoriteTrackRepository
+import com.example.playlistmaker.domain.db.PlaylistRepository
+import com.example.playlistmaker.domain.media.api.ExternalFilesNavigator
 import com.example.playlistmaker.domain.player.api.GetTrack
 import com.example.playlistmaker.domain.player.api.MediaPlayerManager
 import com.example.playlistmaker.domain.search.api.GetJsonFromTrack
@@ -60,11 +65,24 @@ val repositoryModule = module {
         GetTrackImpl()
     }
 
+    // Media
     factory {
         TrackDbConvertor()
     }
 
+    factory {
+        PlaylistDbConvertor(get())
+    }
+
     single<FavoriteTrackRepository> {
         FavoriteTrackRepositoryImpl(get(), get())
+    }
+
+    single<PlaylistRepository> {
+        PlaylistRepositoryImpl(get(), get())
+    }
+
+    single<ExternalFilesNavigator> {
+        ExternalFilesNavigatorImpl(androidApplication())
     }
 }

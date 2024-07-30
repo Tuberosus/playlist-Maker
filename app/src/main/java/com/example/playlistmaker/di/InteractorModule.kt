@@ -1,7 +1,10 @@
 package com.example.playlistmaker.di
 
 import com.example.playlistmaker.domain.db.FavoriteTrackInteractor
+import com.example.playlistmaker.domain.db.TrackCountStringBuilder
 import com.example.playlistmaker.domain.db.impl.FavoriteTrackInteractorImpl
+import com.example.playlistmaker.domain.media.api.PlaylistInteractor
+import com.example.playlistmaker.domain.media.impl.PlaylistInteractorImpl
 import com.example.playlistmaker.domain.player.api.GetTrackUseCase
 import com.example.playlistmaker.domain.player.api.MediaPlayerInteractor
 import com.example.playlistmaker.domain.player.impl.GetTrackUseCaseImpl
@@ -16,6 +19,7 @@ import com.example.playlistmaker.domain.settings.SettingsInteractor
 import com.example.playlistmaker.domain.settings.impl.SettingsInteractorImpl
 import com.example.playlistmaker.domain.sharing.SharingInteractor
 import com.example.playlistmaker.domain.sharing.impl.SharingInteractorImpl
+import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module
 
 val interactorModule = module {
@@ -51,7 +55,12 @@ val interactorModule = module {
         MediaPlayerInteractorImpl(get())
     }
 
+    // Media
     single<FavoriteTrackInteractor> {
         FavoriteTrackInteractorImpl(get())
+    }
+
+    single<PlaylistInteractor> {
+        PlaylistInteractorImpl(get(), get())
     }
 }

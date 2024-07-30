@@ -30,6 +30,12 @@
     <dimen name="btn_margin_ic">46dp</dimen>
     <dimen name="top_margin_btn">24dp</dimen>
     <dimen name="text_size_media_ph">19sp</dimen>
+    <dimen name="input_text_top_margin">32dp</dimen>
+    <dimen name="input_text_start_margin">16dp</dimen>
+    <dimen name="margin_bottom">32dp</dimen>
+    <dimen name="playlist_text_size">12sp</dimen>
+    <dimen name="playlist_image_radius">8dp</dimen>
+    <dimen name="playlist_view_padding">16dp</dimen>
 
     <!--  bottom navigation  -->
     <dimen name="bottom_nav_text_size">12sp</dimen>
