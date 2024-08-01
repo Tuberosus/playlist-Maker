@@ -11,6 +11,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.db.TrackCountStringBuilder
 import com.example.playlistmaker.domain.models.Playlist
+import java.io.File
 
 class PlaylistViewHolder(
     itemView: View
@@ -21,9 +22,11 @@ class PlaylistViewHolder(
     private val countTrack = itemView.findViewById<TextView>(R.id.count)
 
     fun bind(playlist: Playlist) {
+
         Glide.with(itemView.context)
-            .load(playlist.imageDir?.toUri())
+            .load(File(playlist.imageDir ?: ""))
             .placeholder(R.drawable.placeholder_playlist_default)
+            .centerInside()
             .transform(
                 RoundedCorners(
                     TypedValue.applyDimension(

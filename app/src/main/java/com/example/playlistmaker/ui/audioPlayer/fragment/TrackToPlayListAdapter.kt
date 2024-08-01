@@ -1,4 +1,4 @@
-package com.example.playlistmaker.ui.audioPlayer.activity
+package com.example.playlistmaker.ui.audioPlayer.fragment
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.models.Playlist
 
-class TrackToPlayListAdapter : RecyclerView.Adapter<TrackToPlaylistViewHolder>() {
+class TrackToPlayListAdapter(private val clickListener: PlaylistClickListener) : RecyclerView.Adapter<TrackToPlaylistViewHolder>() {
 
     val playlists = ArrayList<Playlist>()
 
@@ -21,6 +21,15 @@ class TrackToPlayListAdapter : RecyclerView.Adapter<TrackToPlaylistViewHolder>()
 
     override fun onBindViewHolder(holder: TrackToPlaylistViewHolder, position: Int) {
         holder.bind(playlists[position])
+
+        holder.itemView.setOnClickListener {
+            clickListener.onPlaylistClick(playlists[position])
+        }
+
+    }
+
+    fun interface PlaylistClickListener {
+        fun onPlaylistClick(playlist: Playlist)
     }
 
 }

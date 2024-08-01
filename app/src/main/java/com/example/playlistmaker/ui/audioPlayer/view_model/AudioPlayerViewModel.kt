@@ -1,21 +1,27 @@
 package com.example.playlistmaker.ui.audioPlayer.view_model
 
+import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.db.FavoriteTrackInteractor
 import com.example.playlistmaker.domain.media.api.PlaylistInteractor
+import com.example.playlistmaker.domain.models.Playlist
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.domain.player.PlayerState
 import com.example.playlistmaker.domain.player.api.GetTrackUseCase
 import com.example.playlistmaker.domain.player.api.MediaPlayerInteractor
-import com.example.playlistmaker.ui.audioPlayer.PlaybackState
 import com.example.playlistmaker.ui.audioPlayer.BottomSheetScreenState
+import com.example.playlistmaker.ui.audioPlayer.PlaybackState
+import com.example.playlistmaker.ui.audioPlayer.ToastState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -24,7 +30,8 @@ class AudioPlayerViewModel(
     private val playerInteractor: MediaPlayerInteractor,
     private val favoriteTrackInteractor: FavoriteTrackInteractor,
     private val jsonTrack: String,
-    private val playlistInteractor: PlaylistInteractor
+    private val playlistInteractor: PlaylistInteractor,
+    private val application: Application
 ) : ViewModel() {
 
     companion object {
@@ -43,17 +50,19 @@ class AudioPlayerViewModel(
     private val playbackStateLiveData = MutableLiveData<PlaybackState>()
     private val isLikeLiveData = MutableLiveData<Boolean>()
     private val playlistLiveData = MutableLiveData<BottomSheetScreenState>()
+    private val toastTextLiveData = MutableLiveData<ToastState>()
 
     fun getScreenStateLiveData(): LiveData<Track> = screenStateLiveData
     fun getPlaybackStateLiveData(): LiveData<PlaybackState> = playbackStateLiveData
     fun getIsLikeLiveData(): LiveData<Boolean> = isLikeLiveData
     fun getBottomSheetState(): LiveData<BottomSheetScreenState> = playlistLiveData
+    fun getToastTextLiveData(): LiveData<ToastState> = toastTextLiveData
 
 
     init {
+        loadPlayer()
         isInFavorite()
         getPlaylistState()
-        loadPlayer()
     }
 
 
@@ -150,6 +159,45 @@ class AudioPlayerViewModel(
                     )
                 }
         }
+    }
+
+    fun putTrackIntoPlaylist(playlist: Playlist) {
+        viewModelScope.launch {
+
+            val isAdd = playlist.tracksId.contains(track.trackId)
+
+            if (isAdd) {
+                makeToastText(isAdd, playlist.name)
+            } else {
+                playlist.tracksId.add(track.trackId)
+                withContext(Dispatchers.IO) {
+                    playlistInteractor.updatePlaylist(
+                        name = playlist.name,
+                        tracksId = playlist.tracksId,
+                        trackCount = playlist.trackCount + 1
+                    )
+                }
+                makeToastText(isAdd, playlist.name)
+                getPlaylistState()
+            }
+        }
+    }
+
+    private fun makeToastText(isAdd: Boolean, playlistName: String) {
+        toastTextLiveData.value =
+            if (isAdd) {
+                ToastState.ShowError(
+                    application.getString(R.string.addPlaylistError, playlistName)
+                )
+            } else {
+                ToastState.ShowSuccess(
+                    application.getString(R.string.addPlaylistSuccess, playlistName)
+                )
+            }
+    }
+
+    fun toastWasShown() {
+        toastTextLiveData.value = ToastState.None
     }
 
 }

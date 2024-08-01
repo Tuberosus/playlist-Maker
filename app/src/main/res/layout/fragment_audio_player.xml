@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.audioPlayer.activity.AudioPlayerActivity">
+    tools:context=".ui.audioPlayer.fragment.AudioPlayerFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -234,12 +234,18 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
+    <View android:id="@+id/overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#99000000"
+        android:visibility="gone"/>
+
     <LinearLayout
         android:id="@+id/bottomSheetContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="@color/background"
+        android:background="@drawable/bottom_sheet_bg"
         app:behavior_hideable="true"
         app:behavior_peekHeight="500dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">

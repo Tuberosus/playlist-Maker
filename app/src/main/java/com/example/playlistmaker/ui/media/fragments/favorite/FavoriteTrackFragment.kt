@@ -1,15 +1,16 @@
 package com.example.playlistmaker.ui.media.fragments.favorite
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentFavoriteTrackBinding
 import com.example.playlistmaker.domain.models.Track
-import com.example.playlistmaker.ui.audioPlayer.activity.AudioPlayerActivity
+import com.example.playlistmaker.ui.audioPlayer.fragment.AudioPlayerFragment
 import com.example.playlistmaker.ui.media.MediaScreenState
 import com.example.playlistmaker.ui.media.view_model.FavoriteTrackViewModel
 import com.example.playlistmaker.util.debounce
@@ -115,8 +116,9 @@ class FavoriteTrackFragment : Fragment() {
     }
 
     private fun openPlayer(jsonTrack: String) {
-        val intent = Intent(requireContext(), AudioPlayerActivity::class.java)
-        intent.putExtra(AudioPlayerActivity.TRACK_TAG, jsonTrack)
-        startActivity(intent)
+        findNavController().navigate(
+            R.id.action_mediaFragment_to_audioPlayerFragment,
+            AudioPlayerFragment.createArgs(jsonTrack)
+        )
     }
 }

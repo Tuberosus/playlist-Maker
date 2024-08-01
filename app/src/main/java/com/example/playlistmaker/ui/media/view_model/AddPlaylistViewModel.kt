@@ -24,7 +24,6 @@ class AddPlaylistViewModel(private val interactor: PlaylistInteractor) : ViewMod
             val playlist = Playlist(
                 name = playlistName!!,
                 description = playlistDescription,
-                tracksId = null,
                 imageDir = imagePath
             )
             interactor.insertPlaylist(playlist)

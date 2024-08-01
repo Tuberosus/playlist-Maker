@@ -6,6 +6,7 @@ import com.example.playlistmaker.domain.media.api.ExternalFilesNavigator
 import com.example.playlistmaker.domain.media.api.PlaylistInteractor
 import com.example.playlistmaker.domain.models.Playlist
 import kotlinx.coroutines.flow.Flow
+import java.util.concurrent.Executors
 
 class PlaylistInteractorImpl(
     private val repository: PlaylistRepository,
@@ -16,8 +17,8 @@ class PlaylistInteractorImpl(
         repository.insertPlaylist(playlist)
     }
 
-    override fun updatePlaylist(playlist: Playlist) {
-        repository.updatePlaylist(playlist)
+    override fun updatePlaylist(name: String, tracksId: ArrayList<Int>, trackCount: Int) {
+        repository.updatePlaylist(name, tracksId, trackCount)
     }
 
     override fun getPlaylists(): Flow<List<Playlist>> {
@@ -30,6 +31,10 @@ class PlaylistInteractorImpl(
 
     override fun getImageFromPrivateStorage(name: String): Uri {
         return externalFilesNavigator.getImageFromPrivateStorage(name)
+    }
+
+    override fun getPlaylistByName(playlistName: String): Flow<Playlist> {
+       return repository.getPlaylistByName(playlistName)
     }
 
 }

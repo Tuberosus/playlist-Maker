@@ -1,57 +1,82 @@
-package com.example.playlistmaker.ui.audioPlayer.activity
+package com.example.playlistmaker.ui.audioPlayer.fragment
 
 import android.os.Bundle
 import android.util.TypedValue
+import android.view.LayoutInflater
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.commit
+import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
-import com.example.playlistmaker.databinding.ActivityAudioPlayerBinding
+import com.example.playlistmaker.databinding.FragmentAudioPlayerBinding
 import com.example.playlistmaker.domain.models.Playlist
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.ui.audioPlayer.BottomSheetScreenState
 import com.example.playlistmaker.ui.audioPlayer.PlaybackState
+import com.example.playlistmaker.ui.audioPlayer.ToastState
 import com.example.playlistmaker.ui.audioPlayer.view_model.AudioPlayerViewModel
-import com.example.playlistmaker.ui.media.fragments.playlists.AddPlaylistFragment
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
-class AudioPlayerActivity : AppCompatActivity() {
+class AudioPlayerFragment : Fragment() {
 
     companion object {
         const val TRACK_TAG = "track"
+
+        fun createArgs(jsonTrack: String): Bundle {
+            return bundleOf(
+                TRACK_TAG to jsonTrack
+            )
+        }
     }
 
-    private val jsonTrack by lazy { intent.getStringExtra(TRACK_TAG) ?: "" }
-
+    private val jsonTrack by lazy { requireArguments().getString(TRACK_TAG) }
     private val viewModel by viewModel<AudioPlayerViewModel> {
         parametersOf(jsonTrack)
     }
 
     private lateinit var adapter: TrackToPlayListAdapter
 
-    private lateinit var binding: ActivityAudioPlayerBinding
+    private val bottomSheetBehavior by lazy {
+        BottomSheetBehavior.from(binding.bottomSheetContainer)
+    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityAudioPlayerBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    private var _binding: FragmentAudioPlayerBinding? = null
+    private val binding get() = _binding!!
 
-        adapter = TrackToPlayListAdapter()
-        binding.bottomRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentAudioPlayerBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        adapter = TrackToPlayListAdapter{
+            viewModel.putTrackIntoPlaylist(it)
+        }
+
+        binding.bottomRecyclerView.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.bottomRecyclerView.adapter = adapter
 
         //загрузка экрана
-        viewModel.getScreenStateLiveData().observe(this) { track ->
+        viewModel.getScreenStateLiveData().observe(viewLifecycleOwner) { track ->
             loadTrackInfo(track)
         }
 
         //работа с воспроизведением
-        viewModel.getPlaybackStateLiveData().observe(this) { playbackState ->
+        viewModel.getPlaybackStateLiveData().observe(viewLifecycleOwner) { playbackState ->
             when (playbackState) {
                 is PlaybackState.Play -> {
                     play(playbackState.time)
@@ -68,20 +93,30 @@ class AudioPlayerActivity : AppCompatActivity() {
         }
 
         // Загрузка плейлистов в bottom sheet
-        viewModel.getBottomSheetState().observe(this) { bottomSheetState ->
+        viewModel.getBottomSheetState().observe(viewLifecycleOwner) { bottomSheetState ->
             when (bottomSheetState) {
-                is BottomSheetScreenState.Loading -> { showPlaylistLoading() }
-                is BottomSheetScreenState.Content -> { showPlaylist(bottomSheetState.playlists) }
+                is BottomSheetScreenState.Loading -> {
+                    showPlaylistLoading()
+                }
+
+                is BottomSheetScreenState.Content -> {
+                    showPlaylist(bottomSheetState.playlists)
+                }
             }
         }
 
         // Загрузка есть ли лайк у трека
-        viewModel.getIsLikeLiveData().observe(this) { isLike ->
+        viewModel.getIsLikeLiveData().observe(viewLifecycleOwner) { isLike ->
             setLike(isLike)
         }
 
+        // обработка toast при добавлении трека в плейлист
+        viewModel.getToastTextLiveData().observe(viewLifecycleOwner) { state ->
+            showToast(state)
+        }
+
         // кнопка назад
-        binding.buttonBack.setOnClickListener { finish() }
+        binding.buttonBack.setOnClickListener { findNavController().popBackStack() }
 
         //обработка нажатия кнопки play
         binding.buttonPlay.setOnClickListener {
@@ -100,14 +135,36 @@ class AudioPlayerActivity : AppCompatActivity() {
         }
 
         binding.newPlaylistButton.setOnClickListener {
-
+            findNavController().navigate(R.id.action_audioPlayerFragment_to_addPlaylistFragment)
         }
+
+        bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+
+                when (newState) {
+                    BottomSheetBehavior.STATE_HIDDEN -> {
+                        binding.overlay.visibility = View.GONE
+                    }
+                    else -> {
+                        binding.overlay.visibility = View.VISIBLE
+                    }
+                }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+        })
     }
 
     override fun onPause() {
         super.onPause()
         viewModel.onPause()
         pause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.getPlaylistState()
     }
 
     private fun loadTrackInfo(track: Track) {
@@ -176,6 +233,21 @@ class AudioPlayerActivity : AppCompatActivity() {
         adapter.playlists.clear()
         adapter.playlists.addAll(playlists)
         adapter.notifyDataSetChanged()
+    }
+
+    private fun showToast(state: ToastState) {
+        when (state) {
+            is ToastState.ShowSuccess -> {
+                Toast.makeText(requireContext(), state.text, Toast.LENGTH_SHORT).show()
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                viewModel.toastWasShown()
+            }
+            is ToastState.ShowError -> {
+                Toast.makeText(requireContext(), state.text, Toast.LENGTH_SHORT).show()
+                viewModel.toastWasShown()
+            }
+            is ToastState.None -> null
+        }
     }
 
 }

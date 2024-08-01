@@ -17,13 +17,19 @@ class PlaylistRepositoryImpl(
         appDatabase.playListDao().insertPlaylist(convertor.map(playlist))
     }
 
-    override fun updatePlaylist(playlist: Playlist) {
-        appDatabase.playListDao().updatePlaylist(convertor.map(playlist))
+    override fun updatePlaylist(name: String, tracksId: ArrayList<Int>, trackCount: Int) {
+        val tracksIdJson = convertor.map(tracksId)
+        appDatabase.playListDao().updatePlaylist(name, tracksIdJson, trackCount)
     }
 
     override fun getPlaylists(): Flow<List<Playlist>> = flow {
         val playlists = appDatabase.playListDao().getPlaylists()
         emit(convertFromPlaylistEntity(playlists))
+    }
+
+    override fun getPlaylistByName(playlistName: String): Flow<Playlist> = flow {
+        val playlist = appDatabase.playListDao().getPlaylistByName(playlistName)
+        emit(convertor.map(playlist))
     }
 
     private fun convertFromPlaylistEntity(playlists: List<PlayListEntity>): List<Playlist> {

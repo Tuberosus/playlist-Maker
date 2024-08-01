@@ -21,9 +21,13 @@ class PlaylistDbConvertor(private val gson: Gson) {
         return Playlist(
             name = playListEntity.name,
             description = playListEntity.description,
-            tracksId = gson.fromJson(playListEntity.tracksId, object : TypeToken<List<Int>>() {}.type),
+            tracksId = gson.fromJson(playListEntity.tracksId, object : TypeToken<ArrayList<Int>>() {}.type),
             imageDir = playListEntity.imageDir,
             trackCount = playListEntity.trackCount
         )
+    }
+
+    fun map(tracksId: ArrayList<Int>): String {
+        return gson.toJson(tracksId)
     }
 }

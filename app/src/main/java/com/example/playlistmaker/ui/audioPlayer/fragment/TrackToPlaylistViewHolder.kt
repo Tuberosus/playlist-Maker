@@ -1,4 +1,4 @@
-package com.example.playlistmaker.ui.audioPlayer.activity
+package com.example.playlistmaker.ui.audioPlayer.fragment
 
 import android.util.TypedValue
 import android.view.View
@@ -11,6 +11,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.db.TrackCountStringBuilder
 import com.example.playlistmaker.domain.models.Playlist
+import java.io.File
 
 class TrackToPlaylistViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
 
@@ -20,7 +21,8 @@ class TrackToPlaylistViewHolder(itemView: View): RecyclerView.ViewHolder(itemVie
 
     fun bind(playlist: Playlist) {
         Glide.with(itemView.context)
-            .load(playlist.imageDir?.toUri())
+            .load(File(playlist.imageDir ?: ""))
+            .error(R.drawable.placeholder_playlist_default)
             .placeholder(R.drawable.placeholder_playlist_default)
             .transform(
                 RoundedCorners(
