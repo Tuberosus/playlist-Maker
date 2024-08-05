@@ -1,6 +1,7 @@
 package com.example.playlistmaker.ui.audioPlayer.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -16,8 +17,8 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentAudioPlayerBinding
 import com.example.playlistmaker.domain.models.Playlist
 import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.ui.audioPlayer.AudioPlayerScreenState
 import com.example.playlistmaker.ui.audioPlayer.BottomSheetScreenState
-import com.example.playlistmaker.ui.audioPlayer.PlaybackState
 import com.example.playlistmaker.ui.audioPlayer.ToastState
 import com.example.playlistmaker.ui.audioPlayer.view_model.AudioPlayerViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -62,6 +63,7 @@ class AudioPlayerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        Log.d("MyTag", "onCreated")
         adapter = TrackToPlayListAdapter{
             viewModel.putTrackIntoPlaylist(it)
         }
@@ -70,26 +72,8 @@ class AudioPlayerFragment : Fragment() {
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.bottomRecyclerView.adapter = adapter
 
-        //загрузка экрана
-        viewModel.getScreenStateLiveData().observe(viewLifecycleOwner) { track ->
-            loadTrackInfo(track)
-        }
-
-        //работа с воспроизведением
-        viewModel.getPlaybackStateLiveData().observe(viewLifecycleOwner) { playbackState ->
-            when (playbackState) {
-                is PlaybackState.Play -> {
-                    play(playbackState.time)
-                }
-
-                PlaybackState.Pause -> {
-                    pause()
-                }
-
-                PlaybackState.Default -> {
-                    setDefaultPlayerState()
-                }
-            }
+        viewModel.getAudioPlayerState().observe(viewLifecycleOwner) { state ->
+            render(state)
         }
 
         // Загрузка плейлистов в bottom sheet
@@ -103,11 +87,6 @@ class AudioPlayerFragment : Fragment() {
                     showPlaylist(bottomSheetState.playlists)
                 }
             }
-        }
-
-        // Загрузка есть ли лайк у трека
-        viewModel.getIsLikeLiveData().observe(viewLifecycleOwner) { isLike ->
-            setLike(isLike)
         }
 
         // обработка toast при добавлении трека в плейлист
@@ -167,6 +146,16 @@ class AudioPlayerFragment : Fragment() {
         viewModel.getPlaylistState()
     }
 
+    private fun render (state: AudioPlayerScreenState) {
+        when (state) {
+            is AudioPlayerScreenState.LoadTrack -> loadTrackInfo(state.track)
+            is AudioPlayerScreenState.Play -> play(state.time)
+            is AudioPlayerScreenState.Pause -> pause()
+            is AudioPlayerScreenState.Default -> setDefaultPlayerState()
+            is AudioPlayerScreenState.TrackLike -> setLike(state.isLike)
+        }
+    }
+
     private fun loadTrackInfo(track: Track) {
         //загрузка фото альбома
         Glide.with(this)
@@ -212,6 +201,7 @@ class AudioPlayerFragment : Fragment() {
     }
 
     private fun setLike(isLike: Boolean) {
+        Log.d("MyTag", "setLike")
         binding.buttonLike.setImageResource(
             if (isLike) {
                 R.drawable.button_like_active

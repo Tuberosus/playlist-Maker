@@ -1,11 +1,13 @@
 package com.example.playlistmaker.ui.audioPlayer.view_model
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.R
+import com.example.playlistmaker.di.viewModelModule
 import com.example.playlistmaker.domain.db.FavoriteTrackInteractor
 import com.example.playlistmaker.domain.media.api.PlaylistInteractor
 import com.example.playlistmaker.domain.models.Playlist
@@ -13,6 +15,7 @@ import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.domain.player.PlayerState
 import com.example.playlistmaker.domain.player.api.GetTrackUseCase
 import com.example.playlistmaker.domain.player.api.MediaPlayerInteractor
+import com.example.playlistmaker.ui.audioPlayer.AudioPlayerScreenState
 import com.example.playlistmaker.ui.audioPlayer.BottomSheetScreenState
 import com.example.playlistmaker.ui.audioPlayer.PlaybackState
 import com.example.playlistmaker.ui.audioPlayer.ToastState
@@ -46,23 +49,28 @@ class AudioPlayerViewModel(
 
     private var currentPlayerState = PlayerState.DEFAULT
 
-    private val screenStateLiveData = MutableLiveData<Track>()
-    private val playbackStateLiveData = MutableLiveData<PlaybackState>()
-    private val isLikeLiveData = MutableLiveData<Boolean>()
+    //    private val screenStateLiveData = MutableLiveData<Track>()
+//    private val playbackStateLiveData = MutableLiveData<PlaybackState>()
+//    private val isLikeLiveData = MutableLiveData<Boolean>()
+    private val audioPlayerStateLiveData = MutableLiveData<AudioPlayerScreenState>()
     private val playlistLiveData = MutableLiveData<BottomSheetScreenState>()
     private val toastTextLiveData = MutableLiveData<ToastState>()
 
-    fun getScreenStateLiveData(): LiveData<Track> = screenStateLiveData
-    fun getPlaybackStateLiveData(): LiveData<PlaybackState> = playbackStateLiveData
-    fun getIsLikeLiveData(): LiveData<Boolean> = isLikeLiveData
+    //    fun getScreenStateLiveData(): LiveData<Track> = screenStateLiveData
+//    fun getPlaybackStateLiveData(): LiveData<PlaybackState> = playbackStateLiveData
+//    fun getIsLikeLiveData(): LiveData<Boolean> = isLikeLiveData
+    fun getAudioPlayerState(): LiveData<AudioPlayerScreenState> = audioPlayerStateLiveData
     fun getBottomSheetState(): LiveData<BottomSheetScreenState> = playlistLiveData
     fun getToastTextLiveData(): LiveData<ToastState> = toastTextLiveData
 
 
     init {
-        loadPlayer()
-        isInFavorite()
-        getPlaylistState()
+        viewModelScope.launch {
+            delay(100)
+            loadPlayer()
+            isInFavorite()
+            getPlaylistState()
+        }
     }
 
 
@@ -74,13 +82,6 @@ class AudioPlayerViewModel(
 
     fun onPause() = pause()
 
-    fun loadPlayer() {
-        screenStateLiveData.value = track
-        viewModelScope.launch {
-            playerInteractor.preparePlayer(track.previewUrl!!)
-        }
-    }
-
     private fun play() {
         playerInteractor.play()
         startTimerUpdate()
@@ -89,7 +90,7 @@ class AudioPlayerViewModel(
 
     private fun pause() {
         playerInteractor.pause()
-        playbackStateLiveData.postValue(PlaybackState.Pause)
+        audioPlayerStateLiveData.postValue(AudioPlayerScreenState.Pause)
         stopTimerUpdate()
     }
 
@@ -100,7 +101,7 @@ class AudioPlayerViewModel(
             PlayerState.PAUSED -> play()
             PlayerState.PREPARED -> play()
             PlayerState.DONE -> {
-                playbackStateLiveData.postValue(PlaybackState.Default)
+                audioPlayerStateLiveData.postValue(AudioPlayerScreenState.Default)
                 stopTimerUpdate()
                 playerInteractor.setState(PlayerState.PREPARED)
             }
@@ -115,7 +116,7 @@ class AudioPlayerViewModel(
                 val time = dateFormat.format(
                     playerInteractor.getCurrentPosition()
                 )
-                playbackStateLiveData.postValue(PlaybackState.Play(time))
+                audioPlayerStateLiveData.postValue(AudioPlayerScreenState.Play(time))
                 delay(TIMER_DELAY)
             }
         }
@@ -127,7 +128,7 @@ class AudioPlayerViewModel(
 
     fun clickOnLike() {
         isFavorite = !isFavorite
-        isLikeLiveData.postValue(isFavorite)
+        audioPlayerStateLiveData.postValue(AudioPlayerScreenState.TrackLike(isFavorite))
 
         viewModelScope.launch(Dispatchers.IO) {
             if (isFavorite) {
@@ -138,13 +139,22 @@ class AudioPlayerViewModel(
         }
     }
 
+    private fun loadPlayer() {
+        Log.d("MyTag", "init: ${track.toString()}")
+        audioPlayerStateLiveData.postValue(AudioPlayerScreenState.LoadTrack(track))
+        viewModelScope.launch {
+            playerInteractor.preparePlayer(track.previewUrl!!)
+
+        }
+    }
+
     private fun isInFavorite() {
         viewModelScope.launch(Dispatchers.IO) {
             val trackId = getTrackUseCase.execute(jsonTrack).trackId
             favoriteTrackInteractor.getTrackIdInFavorite()
                 .collect { ids ->
                     isFavorite = ids.contains(trackId)
-                    isLikeLiveData.postValue(isFavorite)
+                    audioPlayerStateLiveData.postValue(AudioPlayerScreenState.TrackLike(isFavorite))
                 }
         }
     }
@@ -162,36 +172,28 @@ class AudioPlayerViewModel(
     }
 
     fun putTrackIntoPlaylist(playlist: Playlist) {
-        viewModelScope.launch {
-
-            val isAdd = playlist.tracksId.contains(track.trackId)
-
-            if (isAdd) {
-                makeToastText(isAdd, playlist.name)
-            } else {
-                playlist.tracksId.add(track.trackId)
-                withContext(Dispatchers.IO) {
-                    playlistInteractor.updatePlaylist(
-                        name = playlist.name,
-                        tracksId = playlist.tracksId,
-                        trackCount = playlist.trackCount + 1
-                    )
+        viewModelScope.launch(Dispatchers.IO) {
+            val isAdd = playlistInteractor.updatePlaylist(playlist, track)
+            withContext(Dispatchers.Main) {
+                if (isAdd) {
+                    makeToastText(isAdd, playlist.name)
+                } else {
+                    makeToastText(isAdd, playlist.name)
                 }
-                makeToastText(isAdd, playlist.name)
-                getPlaylistState()
             }
         }
+        getPlaylistState()
     }
 
     private fun makeToastText(isAdd: Boolean, playlistName: String) {
         toastTextLiveData.value =
             if (isAdd) {
-                ToastState.ShowError(
-                    application.getString(R.string.addPlaylistError, playlistName)
-                )
-            } else {
                 ToastState.ShowSuccess(
                     application.getString(R.string.addPlaylistSuccess, playlistName)
+                )
+            } else {
+                ToastState.ShowError(
+                    application.getString(R.string.addPlaylistError, playlistName)
                 )
             }
     }

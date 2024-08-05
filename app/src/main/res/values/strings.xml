@@ -37,6 +37,7 @@
     <string name="playlist_name">Название*</string>
     <string name="description">Описание</string>
     <string name="save">Сохранить</string>
+    <string name="create">Создать</string>
     <string name="confirm_dialog_title">Завершить создание плейлиста?</string>
     <string name="confirm_dialog_message">Все несохраненные данные будут потеряны</string>
     <string name="confirm_dialog_cancel">Отмена</string>

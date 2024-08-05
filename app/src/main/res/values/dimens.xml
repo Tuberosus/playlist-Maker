@@ -13,6 +13,7 @@
     <dimen name="icon_padding">8dp</dimen>
     <dimen name="input_height">52dp</dimen>
     <dimen name="artwork_radius">2dp</dimen>
+    <dimen name="ic_album_size">44dp</dimen>
 
     <!-- Audio Player dimens -->
     <dimen name="ap_14sp">14sp</dimen>
@@ -21,6 +22,7 @@
     <dimen name="ap_gap1">24dp</dimen>
     <dimen name="ap_gap2">20dp</dimen>
     <dimen name="ap_margin">4dp</dimen>
+    <dimen name="info_text_margin">16dp</dimen>
     
     <dimen name="progress_bar_size">44dp</dimen>
 
@@ -32,6 +34,7 @@
     <dimen name="text_size_media_ph">19sp</dimen>
     <dimen name="input_text_top_margin">32dp</dimen>
     <dimen name="input_text_start_margin">16dp</dimen>
+    <dimen name="input_text_height">56dp</dimen>
     <dimen name="margin_bottom">32dp</dimen>
     <dimen name="playlist_text_size">12sp</dimen>
     <dimen name="playlist_image_radius">4dp</dimen>
