@@ -1,5 +1,6 @@
 package com.example.playlistmaker.data.media
 
+import android.util.Log
 import com.example.playlistmaker.data.converters.PlaylistDbConvertor
 import com.example.playlistmaker.data.db.AppDatabase
 import com.example.playlistmaker.data.db.entity.PlayListEntity
@@ -15,6 +16,7 @@ class PlaylistRepositoryImpl(
 ) : PlaylistRepository {
 
     override fun insertPlaylist(playlist: Playlist) {
+        Log.d("MyTag", "add playlist")
         appDatabase.playListDao().insertPlaylist(convertor.map(playlist))
     }
 

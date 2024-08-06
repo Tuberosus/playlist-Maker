@@ -1,6 +1,7 @@
 package com.example.playlistmaker.ui.media.fragments.playlists
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -63,9 +64,15 @@ class PlaylistsFragment : Fragment() {
 
     private fun renderScreenState(state: PlaylistScreenState) {
         when(state) {
-            is PlaylistScreenState.Empty -> { showEmpty() }
-            is PlaylistScreenState.Loading -> { showLoading() }
-            is PlaylistScreenState.Content -> { showContent(state.playlists) }
+            is PlaylistScreenState.Empty -> {
+                Log.d("MyTag", "empty")
+                showEmpty() }
+            is PlaylistScreenState.Loading -> {
+                Log.d("MyTag", "loading")
+                showLoading() }
+            is PlaylistScreenState.Content -> {
+                Log.d("MyTag", "content")
+                showContent(state.playlists) }
         }
     }
 

@@ -44,11 +44,11 @@ class SearchFragment : Fragment() {
     private lateinit var recyclerHistory: RecyclerView
     private lateinit var clearSearchHistoryBtn: Button
 
-    override fun onResume() {
-        super.onResume()
-        adapter.notifyDataSetChanged()
-        historyAdapter.notifyDataSetChanged()
-    }
+//    override fun onResume() {
+//        super.onResume()
+//        adapter.notifyDataSetChanged()
+////        historyAdapter.notifyDataSetChanged()
+//    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -127,7 +127,7 @@ class SearchFragment : Fragment() {
 
         //Логика отображения истории поиска
         binding.inputEditText.setOnFocusChangeListener { _, hasFocus ->
-            viewModel.showHistory()
+            if (hasFocus && inputTextValue.isEmpty()) viewModel.showHistory()
         }
 
         //Отображение кнопки очистки поля поиска

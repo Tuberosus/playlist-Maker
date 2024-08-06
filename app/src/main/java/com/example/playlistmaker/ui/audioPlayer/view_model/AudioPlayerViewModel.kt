@@ -66,7 +66,6 @@ class AudioPlayerViewModel(
 
     init {
         viewModelScope.launch {
-            delay(100)
             loadPlayer()
             isInFavorite()
             getPlaylistState()
@@ -141,7 +140,8 @@ class AudioPlayerViewModel(
 
     private fun loadPlayer() {
         Log.d("MyTag", "init: ${track.toString()}")
-        audioPlayerStateLiveData.postValue(AudioPlayerScreenState.LoadTrack(track))
+        audioPlayerStateLiveData.value = AudioPlayerScreenState.LoadTrack(track)
+//        audioPlayerStateLiveData.postValue(AudioPlayerScreenState.LoadTrack(track))
         viewModelScope.launch {
             playerInteractor.preparePlayer(track.previewUrl!!)
 

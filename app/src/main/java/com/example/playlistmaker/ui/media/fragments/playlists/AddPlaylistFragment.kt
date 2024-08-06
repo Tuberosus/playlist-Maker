@@ -95,8 +95,7 @@ class AddPlaylistFragment : Fragment() {
             .setNeutralButton(R.string.confirm_dialog_cancel) { dialog, which ->
                 // ничего не делаем
             }.setPositiveButton(R.string.confirm_dialog_done) { dialog, which ->
-                // сохраняем изменения и выходим
-                // save()
+                // выходим
                 findNavController().popBackStack()
             }
         if (isAbleToClose) {

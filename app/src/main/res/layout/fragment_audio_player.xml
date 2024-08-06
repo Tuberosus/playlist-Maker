@@ -247,7 +247,7 @@
         android:orientation="vertical"
         android:background="@drawable/bottom_sheet_bg"
         app:behavior_hideable="true"
-        app:behavior_peekHeight="500dp"
+        app:behavior_peekHeight="240dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
         <View
             android:layout_width="40dp"
