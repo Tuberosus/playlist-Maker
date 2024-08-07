@@ -138,10 +138,8 @@ class AudioPlayerViewModel(
         }
     }
 
-    private fun loadPlayer() {
-        Log.d("MyTag", "init: ${track.toString()}")
+    fun loadPlayer() {
         audioPlayerStateLiveData.value = AudioPlayerScreenState.LoadTrack(track)
-//        audioPlayerStateLiveData.postValue(AudioPlayerScreenState.LoadTrack(track))
         viewModelScope.launch {
             playerInteractor.preparePlayer(track.previewUrl!!)
 

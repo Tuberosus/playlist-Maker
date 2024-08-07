@@ -42,6 +42,8 @@ class AudioPlayerFragment : Fragment() {
         parametersOf(jsonTrack)
     }
 
+    private lateinit var savedTrack: Track
+
     private lateinit var adapter: TrackToPlayListAdapter
 
     private val bottomSheetBehavior by lazy {
@@ -63,7 +65,6 @@ class AudioPlayerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Log.d("MyTag", "onCreated")
         adapter = TrackToPlayListAdapter{
             viewModel.putTrackIntoPlaylist(it)
         }
@@ -75,6 +76,8 @@ class AudioPlayerFragment : Fragment() {
         viewModel.getAudioPlayerState().observe(viewLifecycleOwner) { state ->
             render(state)
         }
+
+        if (savedInstanceState != null) loadTrackInfo(savedTrack)
 
         // Загрузка плейлистов в bottom sheet
         viewModel.getBottomSheetState().observe(viewLifecycleOwner) { bottomSheetState ->
@@ -143,6 +146,7 @@ class AudioPlayerFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        Log.d("MyTag", "resume")
         viewModel.getPlaylistState()
     }
 
@@ -157,6 +161,7 @@ class AudioPlayerFragment : Fragment() {
     }
 
     private fun loadTrackInfo(track: Track) {
+        savedTrack = track
         //загрузка фото альбома
         Glide.with(this)
             .load(track.artworkUrl512)
@@ -201,7 +206,6 @@ class AudioPlayerFragment : Fragment() {
     }
 
     private fun setLike(isLike: Boolean) {
-        Log.d("MyTag", "setLike")
         binding.buttonLike.setImageResource(
             if (isLike) {
                 R.drawable.button_like_active

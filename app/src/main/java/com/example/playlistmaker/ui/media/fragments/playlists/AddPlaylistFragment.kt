@@ -10,11 +10,13 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentAddPlaylistBinding
 import com.example.playlistmaker.ui.media.view_model.AddPlaylistViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class AddPlaylistFragment : Fragment() {
@@ -76,7 +78,9 @@ class AddPlaylistFragment : Fragment() {
         }
 
         binding.buttonSave.setOnClickListener {
-            viewModel.savePlaylist()
+            lifecycleScope.launch {
+                viewModel.savePlaylist()
+            }
             showSaveToast(viewModel.playlistName!!)
             findNavController().popBackStack()
         }
