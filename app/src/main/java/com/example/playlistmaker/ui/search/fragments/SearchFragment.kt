@@ -44,12 +44,6 @@ class SearchFragment : Fragment() {
     private lateinit var recyclerHistory: RecyclerView
     private lateinit var clearSearchHistoryBtn: Button
 
-//    override fun onResume() {
-//        super.onResume()
-//        adapter.notifyDataSetChanged()
-////        historyAdapter.notifyDataSetChanged()
-//    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

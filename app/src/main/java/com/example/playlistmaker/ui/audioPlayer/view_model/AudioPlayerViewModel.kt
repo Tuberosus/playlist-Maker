@@ -1,13 +1,11 @@
 package com.example.playlistmaker.ui.audioPlayer.view_model
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.R
-import com.example.playlistmaker.di.viewModelModule
 import com.example.playlistmaker.domain.db.FavoriteTrackInteractor
 import com.example.playlistmaker.domain.media.api.PlaylistInteractor
 import com.example.playlistmaker.domain.models.Playlist
@@ -17,11 +15,9 @@ import com.example.playlistmaker.domain.player.api.GetTrackUseCase
 import com.example.playlistmaker.domain.player.api.MediaPlayerInteractor
 import com.example.playlistmaker.ui.audioPlayer.AudioPlayerScreenState
 import com.example.playlistmaker.ui.audioPlayer.BottomSheetScreenState
-import com.example.playlistmaker.ui.audioPlayer.PlaybackState
 import com.example.playlistmaker.ui.audioPlayer.ToastState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -44,21 +40,15 @@ class AudioPlayerViewModel(
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
     private var timerJob: Job? = null
 
-    var isFavorite = false
-    private val track = getTrackUseCase.execute(jsonTrack)
+    private var isFavorite = false
+    val track: Track = getTrackUseCase.execute(jsonTrack)
 
     private var currentPlayerState = PlayerState.DEFAULT
 
-    //    private val screenStateLiveData = MutableLiveData<Track>()
-//    private val playbackStateLiveData = MutableLiveData<PlaybackState>()
-//    private val isLikeLiveData = MutableLiveData<Boolean>()
     private val audioPlayerStateLiveData = MutableLiveData<AudioPlayerScreenState>()
     private val playlistLiveData = MutableLiveData<BottomSheetScreenState>()
     private val toastTextLiveData = MutableLiveData<ToastState>()
 
-    //    fun getScreenStateLiveData(): LiveData<Track> = screenStateLiveData
-//    fun getPlaybackStateLiveData(): LiveData<PlaybackState> = playbackStateLiveData
-//    fun getIsLikeLiveData(): LiveData<Boolean> = isLikeLiveData
     fun getAudioPlayerState(): LiveData<AudioPlayerScreenState> = audioPlayerStateLiveData
     fun getBottomSheetState(): LiveData<BottomSheetScreenState> = playlistLiveData
     fun getToastTextLiveData(): LiveData<ToastState> = toastTextLiveData
@@ -109,6 +99,12 @@ class AudioPlayerViewModel(
         }
     }
 
+    fun getCurrentPosition(): String {
+        return dateFormat.format(
+            playerInteractor.getCurrentPosition()
+        )
+    }
+
     private fun startTimerUpdate() {
         timerJob = viewModelScope.launch {
             while (playerInteractor.isPlaying()) {
@@ -138,7 +134,7 @@ class AudioPlayerViewModel(
         }
     }
 
-    fun loadPlayer() {
+    private fun loadPlayer() {
         audioPlayerStateLiveData.value = AudioPlayerScreenState.LoadTrack(track)
         viewModelScope.launch {
             playerInteractor.preparePlayer(track.previewUrl!!)

@@ -1,6 +1,5 @@
 package com.example.playlistmaker.ui.media.view_model
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -24,7 +23,6 @@ class PlaylistsViewModel(
     }
 
     fun getPlaylists() {
-        Log.d("MyTag", "getPlaylists: ")
         renderState(PlaylistScreenState.Loading)
         viewModelScope.launch(Dispatchers.IO) {
             delay(200)

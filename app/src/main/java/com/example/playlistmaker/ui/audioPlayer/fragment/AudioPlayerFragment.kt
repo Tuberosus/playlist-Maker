@@ -1,7 +1,6 @@
 package com.example.playlistmaker.ui.audioPlayer.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -42,8 +41,6 @@ class AudioPlayerFragment : Fragment() {
         parametersOf(jsonTrack)
     }
 
-    private lateinit var savedTrack: Track
-
     private lateinit var adapter: TrackToPlayListAdapter
 
     private val bottomSheetBehavior by lazy {
@@ -76,8 +73,6 @@ class AudioPlayerFragment : Fragment() {
         viewModel.getAudioPlayerState().observe(viewLifecycleOwner) { state ->
             render(state)
         }
-
-        if (savedInstanceState != null) loadTrackInfo(savedTrack)
 
         // Загрузка плейлистов в bottom sheet
         viewModel.getBottomSheetState().observe(viewLifecycleOwner) { bottomSheetState ->
@@ -146,7 +141,7 @@ class AudioPlayerFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        Log.d("MyTag", "resume")
+        loadTrackInfo(viewModel.track)
         viewModel.getPlaylistState()
     }
 
@@ -161,7 +156,6 @@ class AudioPlayerFragment : Fragment() {
     }
 
     private fun loadTrackInfo(track: Track) {
-        savedTrack = track
         //загрузка фото альбома
         Glide.with(this)
             .load(track.artworkUrl512)
@@ -182,7 +176,7 @@ class AudioPlayerFragment : Fragment() {
         binding.apply {
             trackName.text = track.trackName
             artistName.text = track.artistName
-            currentDuration.text = "00:00" // заглушка время проигрывания
+            currentDuration.text = viewModel.getCurrentPosition() //"00:00" // заглушка время проигрывания
             duration.text = track.trackTime
             album.text = track.collectionName
             year.text = track.releaseDate.substring(0, 4)
