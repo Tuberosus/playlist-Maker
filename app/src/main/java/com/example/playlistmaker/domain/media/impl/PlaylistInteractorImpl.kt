@@ -14,7 +14,7 @@ class PlaylistInteractorImpl(
     private val externalFilesNavigator: ExternalFilesNavigator
 ) : PlaylistInteractor {
 
-    override fun insertPlaylist(playlist: Playlist) {
+    override suspend fun insertPlaylist(playlist: Playlist) {
         repository.insertPlaylist(playlist)
     }
 

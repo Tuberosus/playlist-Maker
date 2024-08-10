@@ -1,6 +1,7 @@
 package com.example.playlistmaker.ui.audioPlayer.view_model
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -154,7 +155,8 @@ class AudioPlayerViewModel(
     }
 
     fun getPlaylistState() {
-        playlistLiveData.postValue(BottomSheetScreenState.Loading)
+        Log.d("MyTag", "get playlist")
+        playlistLiveData.value = BottomSheetScreenState.Loading
         viewModelScope.launch(Dispatchers.IO) {
             playlistInteractor.getPlaylists()
                 .collect { playlist ->
@@ -169,11 +171,7 @@ class AudioPlayerViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             val isAdd = playlistInteractor.updatePlaylist(playlist, track)
             withContext(Dispatchers.Main) {
-                if (isAdd) {
-                    makeToastText(isAdd, playlist.name)
-                } else {
-                    makeToastText(isAdd, playlist.name)
-                }
+                makeToastText(isAdd, playlist.name)
             }
         }
         getPlaylistState()

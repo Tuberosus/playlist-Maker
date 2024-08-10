@@ -1,6 +1,7 @@
 package com.example.playlistmaker.ui.audioPlayer.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -141,6 +142,7 @@ class AudioPlayerFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        Log.d("MyTag", "onResume")
         loadTrackInfo(viewModel.track)
         viewModel.getPlaylistState()
     }

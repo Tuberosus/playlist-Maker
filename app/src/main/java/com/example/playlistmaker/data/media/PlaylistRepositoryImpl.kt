@@ -15,7 +15,7 @@ class PlaylistRepositoryImpl(
     private val convertor: PlaylistDbConvertor,
 ) : PlaylistRepository {
 
-    override fun insertPlaylist(playlist: Playlist) {
+    override suspend fun insertPlaylist(playlist: Playlist) {
         Log.d("MyTag", "add playlist")
         appDatabase.playListDao().insertPlaylist(convertor.map(playlist))
     }

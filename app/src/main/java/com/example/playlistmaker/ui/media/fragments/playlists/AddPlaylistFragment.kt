@@ -1,6 +1,7 @@
 package com.example.playlistmaker.ui.media.fragments.playlists
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +17,8 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentAddPlaylistBinding
 import com.example.playlistmaker.ui.media.view_model.AddPlaylistViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -79,10 +82,14 @@ class AddPlaylistFragment : Fragment() {
 
         binding.buttonSave.setOnClickListener {
             lifecycleScope.launch {
-                viewModel.savePlaylist()
+                launch(Dispatchers.IO) {
+                    viewModel.savePlaylist()
+                    Log.d("MyTag", "save scope")
+                }.join()
+                showSaveToast(viewModel.playlistName!!)
+                Log.d("MyTag", "save done")
+                findNavController().popBackStack()
             }
-            showSaveToast(viewModel.playlistName!!)
-            findNavController().popBackStack()
         }
 
     }
