@@ -3,4 +3,6 @@
     <color name="switch_knob">@color/yp_blue</color>
     <color name="switch_track">@color/yp_blue_light</color>
     <color name="background">@color/yp_black</color>
+    <color name="input_text_stroke">@color/white</color>
+    <color name="rounder_color">@color/white</color>
 </resources>
