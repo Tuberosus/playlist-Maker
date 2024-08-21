@@ -18,13 +18,12 @@ import com.example.playlistmaker.databinding.FragmentAddPlaylistBinding
 import com.example.playlistmaker.ui.media.view_model.AddPlaylistViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class AddPlaylistFragment : Fragment() {
+open class AddPlaylistFragment : Fragment() {
 
-    private val viewModel by viewModel<AddPlaylistViewModel>()
+    open val viewModel by viewModel<AddPlaylistViewModel>()
 
     private var _binding: FragmentAddPlaylistBinding? = null
     private val binding get() = _binding!!

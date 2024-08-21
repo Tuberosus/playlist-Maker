@@ -116,6 +116,13 @@
         <item name="colorOnPrimary">@color/yp_blue</item>
     </style>
 
+    <!-- Стили экрана плейлиста -->
+    <style name="PlaylistTextStyleSecondLine">
+        <item name="android:fontFamily">@font/ys_text_regular</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/yp_black</item>
+    </style>
+
 </resources>
 
 <!--parent="Widget.MaterialComponents.Button.UnelevatedButton"-->

@@ -6,12 +6,12 @@ import androidx.lifecycle.ViewModel
 import com.example.playlistmaker.domain.media.api.PlaylistInteractor
 import com.example.playlistmaker.domain.models.Playlist
 
-class AddPlaylistViewModel(private val interactor: PlaylistInteractor) : ViewModel() {
+open class AddPlaylistViewModel(private val interactor: PlaylistInteractor) : ViewModel() {
 
-    var playlistName: String? = null
-    var playlistDescription: String? = null
-    var imageUri: Uri? = null
-    var imagePath: String? = null
+    open var playlistName: String? = null
+    open var playlistDescription: String? = null
+    open var imageUri: Uri? = null
+    open var imagePath: String? = null
 
     suspend fun savePlaylist() {
         if (imageUri != null) {
@@ -23,6 +23,5 @@ class AddPlaylistViewModel(private val interactor: PlaylistInteractor) : ViewMod
             imageDir = imagePath
         )
         interactor.insertPlaylist(playlist)
-        Log.d("MyTag", "fun savePlaylist")
     }
 }

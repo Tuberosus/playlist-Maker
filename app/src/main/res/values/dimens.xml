@@ -45,4 +45,8 @@
 
     <!--  bottom navigation  -->
     <dimen name="bottom_nav_text_size">12sp</dimen>
+
+    <!--  playlist -->
+    <dimen name="playlist_icon_padding">19dp</dimen>
+
 </resources>

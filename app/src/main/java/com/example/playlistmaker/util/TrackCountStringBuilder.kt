@@ -1,6 +1,5 @@
-package com.example.playlistmaker.domain.db
+package com.example.playlistmaker.util
 
-import android.app.Application
 import android.content.Context
 import com.example.playlistmaker.R
 

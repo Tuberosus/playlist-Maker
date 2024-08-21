@@ -33,6 +33,10 @@ class PlaylistsViewModel(
         }
     }
 
+    fun onPlaylistClick(playlist: Playlist) {
+        playlistsLiveData.value = PlaylistScreenState.PlaylistClick(playlist)
+    }
+
     private fun processResult(playlists: List<Playlist>) {
         if (playlists.isEmpty()) {
             renderState(PlaylistScreenState.Empty)

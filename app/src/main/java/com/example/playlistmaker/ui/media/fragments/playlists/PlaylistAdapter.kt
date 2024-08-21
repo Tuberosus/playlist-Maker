@@ -4,10 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
-import com.example.playlistmaker.domain.db.TrackCountStringBuilder
 import com.example.playlistmaker.domain.models.Playlist
 
-class PlaylistAdapter : RecyclerView.Adapter<PlaylistViewHolder>() {
+class PlaylistAdapter(private val clickListener: PlaylistClickListener) : RecyclerView.Adapter<PlaylistViewHolder>() {
 
     var playlists = ArrayList<Playlist>()
 
@@ -23,6 +22,14 @@ class PlaylistAdapter : RecyclerView.Adapter<PlaylistViewHolder>() {
 
     override fun onBindViewHolder(holder: PlaylistViewHolder, position: Int) {
         holder.bind(playlists[position])
+
+        holder.itemView.setOnClickListener {
+            clickListener.onPlaylistClick(playlists[position])
+        }
+    }
+
+    fun interface PlaylistClickListener {
+        fun onPlaylistClick(playlist: Playlist)
     }
 
 }

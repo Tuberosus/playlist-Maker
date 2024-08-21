@@ -65,6 +65,7 @@ class AudioPlayerFragment : Fragment() {
 
         adapter = TrackToPlayListAdapter{
             viewModel.putTrackIntoPlaylist(it)
+            viewModel.getPlaylistState()
         }
 
         binding.bottomRecyclerView.layoutManager =

@@ -25,6 +25,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/title"
             style="@style/PanelHeader"
             android:layout_marginStart="@dimen/padding_header_start"
             android:text="@string/new_playlist"
