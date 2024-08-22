@@ -10,17 +10,16 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlaylistItemBinding
 import com.example.playlistmaker.domain.models.Playlist
-import com.example.playlistmaker.util.TrackCountStringBuilder
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.ui.audioPlayer.fragment.AudioPlayerFragment
 import com.example.playlistmaker.ui.media.PlaylistItemScreenState
 import com.example.playlistmaker.ui.media.view_model.PlaylistItemViewModel
 import com.example.playlistmaker.util.MinuteCountStringBuilder
+import com.example.playlistmaker.util.TrackCountStringBuilder
 import com.example.playlistmaker.util.debounce
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -63,6 +62,11 @@ class PlaylistItemFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.getScreenState(playlistId)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -116,9 +120,7 @@ class PlaylistItemFragment : Fragment() {
             findNavController().navigate(
                 R.id.action_playlistItemFragment_to_editPlaylistItemFragment,
                 EditPlaylistItemFragment.createArgs(
-                    playlist.imageDir,
-                    playlist.name,
-                    playlist.description
+                    playlist
                 )
             )
         }

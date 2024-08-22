@@ -63,4 +63,8 @@ class PlaylistInteractorImpl(
         repository.deletePlaylist(playlist, trackList)
     }
 
+    override suspend fun fullUpdatePlaylist(playlist: Playlist) {
+        repository.fullUpdatePlaylist(playlist)
+    }
+
 }

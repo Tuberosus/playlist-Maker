@@ -1,5 +1,6 @@
 package com.example.playlistmaker.di
 
+import com.example.playlistmaker.domain.models.Playlist
 import com.example.playlistmaker.ui.audioPlayer.view_model.AudioPlayerViewModel
 import com.example.playlistmaker.ui.media.view_model.FavoriteTrackViewModel
 import com.example.playlistmaker.ui.media.view_model.AddPlaylistViewModel
@@ -42,7 +43,7 @@ val viewModelModule = module {
         PlaylistItemViewModel(playlistId, get(), get(), androidApplication())
     }
 
-    viewModel { (filePath: String?, playlistName: String, playlistDescription: String?) ->
-        EditPlaylistItemViewModel(get(), filePath, playlistName, playlistDescription)
+    viewModel { (playlist: Playlist) ->
+        EditPlaylistItemViewModel(get(), playlist)
     }
 }

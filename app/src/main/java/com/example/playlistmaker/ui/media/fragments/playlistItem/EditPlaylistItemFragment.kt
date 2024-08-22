@@ -1,13 +1,13 @@
 package com.example.playlistmaker.ui.media.fragments.playlistItem
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
+import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
-import com.example.playlistmaker.databinding.FragmentAddPlaylistBinding
+import com.example.playlistmaker.domain.models.Playlist
 import com.example.playlistmaker.ui.media.EditPlaylistScreenState
 import com.example.playlistmaker.ui.media.fragments.playlists.AddPlaylistFragment
 import com.example.playlistmaker.ui.media.view_model.EditPlaylistItemViewModel
@@ -18,51 +18,28 @@ import java.io.File
 class EditPlaylistItemFragment : AddPlaylistFragment() {
 
     companion object {
-        private const val FILE_PATH = "file_path"
-        private const val PLAYLIST_NAME = "playlist_name"
-        private const val PLAYLIST_DESCRIPTION = "playlist_description"
+        private const val PLAYLIST = "playlist"
+
         fun createArgs(
-            filePath: String?,
-            playlistName: String,
-            playlistDescription: String?
+            playlist: Playlist
         ): Bundle {
             return bundleOf(
-                FILE_PATH to filePath,
-                PLAYLIST_NAME to playlistName,
-                PLAYLIST_DESCRIPTION to playlistDescription
+                    PLAYLIST to playlist
             )
         }
     }
 
-    private val filePath by lazy { requireArguments().getString(FILE_PATH) }
-    private val playlistName by lazy { requireArguments().getString(PLAYLIST_NAME) }
-    private val playlistDescription by lazy { requireArguments().getString(PLAYLIST_DESCRIPTION) }
-
-    private var _binding: FragmentAddPlaylistBinding? = null
-    private val binding get() = _binding!!
+    private val playlist by lazy { requireArguments().getSerializable(PLAYLIST) }
 
     override val viewModel by viewModel<EditPlaylistItemViewModel> {
-        parametersOf(filePath, playlistName, playlistDescription)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentAddPlaylistBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
+        parametersOf(playlist)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.title.text = getString(R.string.edit)
+        binding.buttonSave.setText(R.string.save)
 
         viewModel.getPlaylistInfoObserver().observe(viewLifecycleOwner) { state ->
             when (state) {
@@ -70,17 +47,35 @@ class EditPlaylistItemFragment : AddPlaylistFragment() {
             }
         }
 
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner, object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    findNavController().popBackStack()
+                }
+
+            }
+        )
+
+        binding.backArrow.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
+        binding.buttonSave.setOnClickListener {
+            viewModel.updatePlaylist()
+            findNavController().popBackStack()
+        }
+
     }
 
     private fun showPlaylistInfo(state: EditPlaylistScreenState.PlaylistInfo) {
-        if (!state.filePath.isNullOrEmpty()) {
-            binding.addPhoto.setImageURI(File(filePath).toUri())
+        if (!state.playlist.imageDir.isNullOrEmpty()) {
+            binding.addPhoto.setImageURI(File(state.playlist.imageDir).toUri())
         }
 
-        binding.nameInputEditText.setText(state.playlistName)
+        binding.nameInputEditText.setText(state.playlist.name)
 
-        if (!state.playlistDescription.isNullOrEmpty()) {
-            binding.descriptionInputEditText.setText(state.playlistDescription)
+        if (!state.playlist.description.isNullOrEmpty()) {
+            binding.descriptionInputEditText.setText(state.playlist.description)
         }
     }
 }

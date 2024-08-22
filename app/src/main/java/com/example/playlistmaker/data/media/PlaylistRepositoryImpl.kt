@@ -127,6 +127,11 @@ class PlaylistRepositoryImpl(
         Log.d("MyTag", "del playlist")
     }
 
+    override suspend fun fullUpdatePlaylist(playlist: Playlist) {
+        val playListEntity = convertor.map(playlist)
+        appDatabase.playListDao().fullUpdate(playListEntity)
+    }
+
     private fun isTrackInPlaylists(trackId: Int): Boolean {
         val check = appDatabase.linkPlaylistTrack().isTrackInPlaylists(trackId)
         return check > 0

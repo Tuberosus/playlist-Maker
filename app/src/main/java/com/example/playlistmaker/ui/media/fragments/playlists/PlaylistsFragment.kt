@@ -13,12 +13,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlaylistsBinding
 import com.example.playlistmaker.domain.models.Playlist
-import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.ui.media.PlaylistScreenState
 import com.example.playlistmaker.ui.media.fragments.playlistItem.PlaylistItemFragment
 import com.example.playlistmaker.ui.media.view_model.PlaylistsViewModel
-import com.example.playlistmaker.ui.search.fragments.SearchFragment
-import com.example.playlistmaker.ui.search.fragments.SearchFragment.Companion
 import com.example.playlistmaker.util.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -54,7 +51,7 @@ class PlaylistsFragment : Fragment() {
             viewLifecycleOwner.lifecycleScope,
             false
         ) { playlist ->
-            viewModel.onPlaylistClick(playlist)
+            openPlaylist(playlist)
         }
 
         adapter = PlaylistAdapter { playlist ->
@@ -94,9 +91,6 @@ class PlaylistsFragment : Fragment() {
             is PlaylistScreenState.Content -> {
                 Log.d("MyTag", "content")
                 showContent(state.playlists) }
-            is PlaylistScreenState.PlaylistClick -> {
-                openPlaylist(state.playlist)
-            }
         }
     }
 

@@ -6,5 +6,4 @@ sealed interface PlaylistScreenState {
     data object Empty: PlaylistScreenState
     data object Loading: PlaylistScreenState
     data class Content(val playlists: List<Playlist>): PlaylistScreenState
-    data class PlaylistClick(val playlist: Playlist): PlaylistScreenState
 }

@@ -26,7 +26,7 @@ open class AddPlaylistFragment : Fragment() {
     open val viewModel by viewModel<AddPlaylistViewModel>()
 
     private var _binding: FragmentAddPlaylistBinding? = null
-    private val binding get() = _binding!!
+    val binding get() = _binding!!
 
     private var isAbleToClose = true
 

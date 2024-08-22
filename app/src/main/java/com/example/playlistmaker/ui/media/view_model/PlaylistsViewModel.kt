@@ -18,10 +18,6 @@ class PlaylistsViewModel(
     private val playlistsLiveData = MutableLiveData<PlaylistScreenState>()
     val playlistObserver: LiveData<PlaylistScreenState> = playlistsLiveData
 
-    init {
-        getPlaylists()
-    }
-
     fun getPlaylists() {
         renderState(PlaylistScreenState.Loading)
         viewModelScope.launch(Dispatchers.IO) {
@@ -31,10 +27,6 @@ class PlaylistsViewModel(
                     processResult(playlists)
                 }
         }
-    }
-
-    fun onPlaylistClick(playlist: Playlist) {
-        playlistsLiveData.value = PlaylistScreenState.PlaylistClick(playlist)
     }
 
     private fun processResult(playlists: List<Playlist>) {

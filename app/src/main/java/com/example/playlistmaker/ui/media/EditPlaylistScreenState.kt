@@ -1,9 +1,7 @@
 package com.example.playlistmaker.ui.media
 
+import com.example.playlistmaker.domain.models.Playlist
+
 sealed interface EditPlaylistScreenState {
-    data class PlaylistInfo(
-        val filePath: String?,
-        val playlistName: String?,
-        val playlistDescription: String?
-    ) : EditPlaylistScreenState
+    data class PlaylistInfo(val playlist: Playlist) : EditPlaylistScreenState
 }
