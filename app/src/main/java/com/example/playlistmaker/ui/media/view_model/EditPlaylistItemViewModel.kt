@@ -1,6 +1,5 @@
 package com.example.playlistmaker.ui.media.view_model
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -28,8 +27,13 @@ class EditPlaylistItemViewModel(
 
 
     fun updatePlaylist() {
-        Log.d("MyTag", super.playlistDescription.toString())
         viewModelScope.launch(Dispatchers.IO) {
+            if (super.imageUri != null) {
+                if (playlist.imageDir != null) interactor.deleteImage(playlist.imageDir!!)
+                super.imagePath = interactor.saveImageToPrivateStorage(imageUri!!, playlistName!!)
+            } else {
+                super.imagePath = playlist.imageDir
+            }
             val newPlaylist = Playlist(
                 id = playlist.id,
                 name = super.playlistName,

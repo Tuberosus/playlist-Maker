@@ -2,6 +2,7 @@ package com.example.playlistmaker.ui.media.fragments.playlists
 
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -60,6 +61,12 @@ class PlaylistsFragment : Fragment() {
 
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+
+        val dp = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            view.resources.getDimension(R.dimen.setting_title_margin),
+            view.resources.displayMetrics).toInt()
+        binding.recyclerView.addItemDecoration(GridSpacingItemDecoration(2, dp, false))
 
         binding.newPlaylistButton.setOnClickListener {
             findNavController().navigate(R.id.action_mediaFragment_to_addPlaylistFragment)

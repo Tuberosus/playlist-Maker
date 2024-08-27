@@ -7,10 +7,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.example.playlistmaker.R
-import com.example.playlistmaker.util.TrackCountStringBuilder
 import com.example.playlistmaker.domain.models.Playlist
+import com.example.playlistmaker.util.TrackCountStringBuilder
 import java.io.File
+
 
 class PlaylistViewHolder(
     itemView: View
@@ -21,18 +23,17 @@ class PlaylistViewHolder(
     private val countTrack = itemView.findViewById<TextView>(R.id.count)
 
     fun bind(playlist: Playlist) {
-
+        val cornerSize = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            itemView.resources.getDimension(R.dimen.playlist_image_radius),
+            itemView.resources.displayMetrics).toInt()
         Glide.with(itemView.context)
             .load(File(playlist.imageDir ?: ""))
             .placeholder(R.drawable.placeholder_playlist_default)
-            .centerInside()
+
+//            .fitCenter()
             .transform(
-                RoundedCorners(
-                    TypedValue.applyDimension(
-                        TypedValue.COMPLEX_UNIT_DIP,
-                        itemView.resources.getDimension(R.dimen.playlist_image_radius),
-                        itemView.resources.displayMetrics).toInt()
-                )
+                RoundedCorners(cornerSize)
             )
             .into(playlistImage)
 

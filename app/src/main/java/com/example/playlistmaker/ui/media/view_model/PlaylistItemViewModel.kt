@@ -31,34 +31,33 @@ class PlaylistItemViewModel(
     fun screenStateObserver(): LiveData<PlaylistItemScreenState> = screenStateLiveData
     fun getTrackClickEvent(): LiveData<String> = trackClickEvent
 
-    init {
-        getScreenState((playlistId))
-    }
-
     fun getScreenState(playlistId: Int) {
-        screenStateLiveData.value = PlaylistItemScreenState.Loading
+        screenStateLiveData.postValue(PlaylistItemScreenState.Loading)
         viewModelScope.launch(Dispatchers.IO) {
             val playlist = getPlaylistById(playlistId)
             if (playlist != null) {
                 val trackList = getTrackList(playlistId)
                 val duration = getTotalDurationInMinutes(playlistId, trackList)
+                Log.d("MyTag", playlist.imageDir.toString())
                 screenStateLiveData.postValue(
                     PlaylistItemScreenState.Content(playlist, duration, trackList)
                 )
             }
         }
+        Log.d("MyTag", "getScreenState Done")
     }
 
-    fun onTrackClick(track: Track) {
-        val json = getJsonFromTrackUseCase.execute(track)
-        trackClickEvent.postValue(json)
+    fun onTrackClick(track: Track): String {
+        return getJsonFromTrackUseCase.execute(track)
     }
 
     fun deleteTrackFromPlaylist(trackId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            playlistInteractor.deleteTrackFromPlaylist(playlistId, trackId)
+            launch {
+                playlistInteractor.deleteTrackFromPlaylist(playlistId, trackId)
+            }.join()
+            getScreenState(playlistId)
         }
-        getScreenState(playlistId)
     }
 
     fun sharePlaylist(playlistId: Int) {
@@ -82,7 +81,6 @@ class PlaylistItemViewModel(
     }
 
     private suspend fun getPlaylistById(playlistId: Int): Playlist? {
-        Log.d("MyTag", playlistId.toString())
         return playlistInteractor.getPlaylistById(playlistId)
     }
 

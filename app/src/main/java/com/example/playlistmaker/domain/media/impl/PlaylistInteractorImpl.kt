@@ -35,6 +35,10 @@ class PlaylistInteractorImpl(
         return externalFilesNavigator.getImageFromPrivateStorage(name)
     }
 
+    override fun deleteImage(imageDir: String) {
+        externalFilesNavigator.deleteImage(imageDir)
+    }
+
     override fun getPlaylistByName(playlistName: String): Flow<Playlist> {
         return repository.getPlaylistByName(playlistName)
     }

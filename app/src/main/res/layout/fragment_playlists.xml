@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:gravity="center_horizontal"
     tools:context=".ui.media.fragments.playlists.PlaylistsFragment">
@@ -41,8 +42,8 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_size"
         android:visibility="gone" />
 
 </LinearLayout>

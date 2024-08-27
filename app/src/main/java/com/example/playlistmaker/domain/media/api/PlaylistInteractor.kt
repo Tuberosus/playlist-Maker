@@ -11,6 +11,7 @@ interface PlaylistInteractor {
     fun getPlaylists(): Flow<List<Playlist>>
     fun saveImageToPrivateStorage(uri: Uri, fileName: String): String
     fun getImageFromPrivateStorage(name: String): Uri
+    fun deleteImage(imageDir: String)
     fun getPlaylistByName(playlistName: String): Flow<Playlist>
     suspend fun getPlaylistById(playlistId: Int): Playlist?
     suspend fun getTrackOfPlaylist(playlistId: Int): List<Track>

@@ -5,12 +5,14 @@ import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.models.Playlist
 import com.example.playlistmaker.ui.media.EditPlaylistScreenState
 import com.example.playlistmaker.ui.media.fragments.playlists.AddPlaylistFragment
 import com.example.playlistmaker.ui.media.view_model.EditPlaylistItemViewModel
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.io.File
@@ -61,8 +63,12 @@ class EditPlaylistItemFragment : AddPlaylistFragment() {
         }
 
         binding.buttonSave.setOnClickListener {
-            viewModel.updatePlaylist()
-            findNavController().popBackStack()
+            lifecycleScope.launch {
+                launch {
+                    viewModel.updatePlaylist()
+                }.join()
+                findNavController().popBackStack()
+            }
         }
 
     }

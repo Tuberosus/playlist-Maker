@@ -1,11 +1,14 @@
 package com.example.playlistmaker.ui.media.fragments.playlistItem
 
 import android.os.Bundle
+import android.util.DisplayMetrics
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -23,6 +26,7 @@ import com.example.playlistmaker.util.TrackCountStringBuilder
 import com.example.playlistmaker.util.debounce
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.io.File
@@ -67,6 +71,7 @@ class PlaylistItemFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         viewModel.getScreenState(playlistId)
+        Log.d("MyTag", "onResume in PlaylistItemFragment")
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -90,7 +95,8 @@ class PlaylistItemFragment : Fragment() {
             viewLifecycleOwner.lifecycleScope,
             false
         ) { track ->
-            viewModel.onTrackClick(track)
+            val json = viewModel.onTrackClick(track)
+            openPlayer(json)
         }
 
         viewModel.screenStateObserver().observe(viewLifecycleOwner) { state ->
@@ -107,6 +113,20 @@ class PlaylistItemFragment : Fragment() {
 
         val bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheetContainerSetting)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+
+        // Определение высоты bottom sheet
+        binding.bottomSheetDelimiter.post {
+            // Values should no longer be 0
+            val point = IntArray(2)
+            binding.bottomSheetDelimiter.getLocationInWindow(point) // or getLocationOnScreen(point)
+            val (x, y) = point
+
+            val displayMetrics = DisplayMetrics()
+            val display = requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
+            val displayHeight = displayMetrics.heightPixels
+            val trackListBehavior = BottomSheetBehavior.from(binding.bottomSheetContainer)
+            trackListBehavior.peekHeight = displayHeight - y
+        }
 
         binding.settingIc.setOnClickListener {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
@@ -137,6 +157,10 @@ class PlaylistItemFragment : Fragment() {
                 }.show()
         }
 
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
+
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
@@ -159,11 +183,11 @@ class PlaylistItemFragment : Fragment() {
         playlist = state.playlist
         val duration = state.duration
         val trackList = state.trackList
+        val countTrack = TrackCountStringBuilder(requireContext()).build(playlist.trackCount)
 
         adapter.trackList.clear()
         adapter.trackList.addAll(trackList)
         adapter.notifyDataSetChanged()
-
         Glide.with(this)
             .load(File(playlist.imageDir ?: ""))
             .placeholder(R.drawable.ic_album_default)
@@ -171,9 +195,20 @@ class PlaylistItemFragment : Fragment() {
 
         binding.playlistName.text = playlist.name
         binding.playlistDescription.text = playlist.description
-        binding.playlistCount.text =
-            TrackCountStringBuilder(requireContext()).build(playlist.trackCount)
+        binding.playlistCount.text = countTrack
         binding.playlistTime.text = MinuteCountStringBuilder().build(duration.toInt())
+
+        setImageInSettingBottomSheet(playlist.imageDir)
+        binding.playlistNameInSetting.text = playlist.name
+        binding.countInSetting.text = countTrack
+
+    }
+
+    private fun setImageInSettingBottomSheet(imageDir: String?) {
+        Glide.with(this)
+            .load(File(playlist.imageDir ?: ""))
+            .placeholder(R.drawable.ic_album_default)
+            .into(binding.playlistImageInSetting)
     }
 
     private fun showEmptyShareToast(text: String) {
@@ -199,9 +234,7 @@ class PlaylistItemFragment : Fragment() {
     }
 
     private fun deleteTrackFromPlaylist(track: Track) {
-        Toast.makeText(requireContext(), "DELETE", Toast.LENGTH_SHORT).show()
         viewModel.deleteTrackFromPlaylist(track.trackId)
-        viewModel.getScreenState(playlistId)
     }
 
 }
