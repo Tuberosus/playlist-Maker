@@ -56,4 +56,5 @@
     <string name="delete_playlist">Удалить плейлист</string>
     <string name="delete_playlist_confirm">Хотите удалить плейлист "%s"?</string>
     <string name="edit">Редактировать</string>
+    <string name="empty_tracklist_text">В этом плейлисте нет треков</string>
 </resources>

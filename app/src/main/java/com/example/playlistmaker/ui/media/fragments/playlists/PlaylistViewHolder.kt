@@ -6,6 +6,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.playlistmaker.R
@@ -30,9 +32,10 @@ class PlaylistViewHolder(
         Glide.with(itemView.context)
             .load(File(playlist.imageDir ?: ""))
             .placeholder(R.drawable.placeholder_playlist_default)
-
-//            .fitCenter()
+            .diskCacheStrategy(DiskCacheStrategy.NONE)
+            .skipMemoryCache(true)
             .transform(
+                CenterCrop(),
                 RoundedCorners(cornerSize)
             )
             .into(playlistImage)

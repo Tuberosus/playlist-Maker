@@ -24,7 +24,7 @@ class ExternalFilesNavigatorImpl(
             filePath.mkdirs()
         }
 
-        val file = File(filePath, "${fileName}.jpg")
+        val file = File(filePath, "${fileName}TEST.jpg")
         val inputStream = application.contentResolver.openInputStream(uri)
         val outputStream = FileOutputStream(file)
         BitmapFactory

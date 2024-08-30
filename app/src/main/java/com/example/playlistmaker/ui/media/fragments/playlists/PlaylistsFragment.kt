@@ -1,6 +1,7 @@
 package com.example.playlistmaker.ui.media.fragments.playlists
 
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -19,6 +20,7 @@ import com.example.playlistmaker.ui.media.fragments.playlistItem.PlaylistItemFra
 import com.example.playlistmaker.ui.media.view_model.PlaylistsViewModel
 import com.example.playlistmaker.util.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.io.File
 
 class PlaylistsFragment : Fragment() {
 
@@ -65,7 +67,8 @@ class PlaylistsFragment : Fragment() {
         val dp = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
             view.resources.getDimension(R.dimen.setting_title_margin),
-            view.resources.displayMetrics).toInt()
+            view.resources.displayMetrics
+        ).toInt()
         binding.recyclerView.addItemDecoration(GridSpacingItemDecoration(2, dp, false))
 
         binding.newPlaylistButton.setOnClickListener {
@@ -75,6 +78,19 @@ class PlaylistsFragment : Fragment() {
         viewModel.playlistObserver.observe(viewLifecycleOwner) { state ->
             renderScreenState(state)
         }
+
+        /////
+
+        var s = ""
+        File(
+            requireActivity().getExternalFilesDir(
+                Environment.DIRECTORY_PICTURES
+            ), "playlist_album"
+        ).listFiles()?.forEach {
+            s += "\n$it"
+        }
+        Log.d("MyTag", s)
+        /////
     }
 
     override fun onDestroy() {

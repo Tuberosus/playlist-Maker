@@ -3,6 +3,7 @@ package com.example.playlistmaker.ui.media.fragments.playlistItem
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,10 +11,12 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlaylistItemBinding
 import com.example.playlistmaker.domain.models.Playlist
@@ -71,7 +74,6 @@ class PlaylistItemFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         viewModel.getScreenState(playlistId)
-        Log.d("MyTag", "onResume in PlaylistItemFragment")
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -114,19 +116,24 @@ class PlaylistItemFragment : Fragment() {
         val bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheetContainerSetting)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
 
-        // Определение высоты bottom sheet
-        binding.bottomSheetDelimiter.post {
-            // Values should no longer be 0
-            val point = IntArray(2)
-            binding.bottomSheetDelimiter.getLocationInWindow(point) // or getLocationOnScreen(point)
-            val (x, y) = point
+        bottomSheetBehavior.addBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
 
-            val displayMetrics = DisplayMetrics()
-            val display = requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
-            val displayHeight = displayMetrics.heightPixels
-            val trackListBehavior = BottomSheetBehavior.from(binding.bottomSheetContainer)
-            trackListBehavior.peekHeight = displayHeight - y
-        }
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+
+                when (newState) {
+                    BottomSheetBehavior.STATE_HIDDEN -> {
+                        binding.overlay.visibility = View.GONE
+                    }
+
+                    else -> {
+                        binding.overlay.visibility = View.VISIBLE
+                    }
+                }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+        })
 
         binding.settingIc.setOnClickListener {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
@@ -171,6 +178,23 @@ class PlaylistItemFragment : Fragment() {
         )
     }
 
+    private fun countBottomSheetHeight() {
+        val view = binding.bottomSheetDelimiter
+
+        view.post {
+            // Values should no longer be 0
+            val point = IntArray(2)
+            view.getLocationOnScreen(point) // or getLocationInWindow(point)
+            val (x, y) = point
+
+            val displayMetrics = DisplayMetrics()
+            requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
+            val displayHeight = displayMetrics.heightPixels
+            val trackListBehavior = BottomSheetBehavior.from(binding.bottomSheetContainer)
+            trackListBehavior.peekHeight = displayHeight - y
+        }
+    }
+
     private fun render(state: PlaylistItemScreenState) {
         when (state) {
             is PlaylistItemScreenState.Loading -> {}
@@ -188,10 +212,17 @@ class PlaylistItemFragment : Fragment() {
         adapter.trackList.clear()
         adapter.trackList.addAll(trackList)
         adapter.notifyDataSetChanged()
+
+        binding.emptyTracklistText.isVisible = trackList.isEmpty()
+
         Glide.with(this)
             .load(File(playlist.imageDir ?: ""))
             .placeholder(R.drawable.ic_album_default)
+            .diskCacheStrategy(DiskCacheStrategy.NONE)
+            .skipMemoryCache(true)
             .into(binding.image)
+
+        binding.playlistDescription.isVisible = playlist.description.isNullOrEmpty()
 
         binding.playlistName.text = playlist.name
         binding.playlistDescription.text = playlist.description
@@ -201,13 +232,15 @@ class PlaylistItemFragment : Fragment() {
         setImageInSettingBottomSheet(playlist.imageDir)
         binding.playlistNameInSetting.text = playlist.name
         binding.countInSetting.text = countTrack
-
+        countBottomSheetHeight()
     }
 
     private fun setImageInSettingBottomSheet(imageDir: String?) {
         Glide.with(this)
             .load(File(playlist.imageDir ?: ""))
             .placeholder(R.drawable.ic_album_default)
+            .diskCacheStrategy(DiskCacheStrategy.NONE)
+            .skipMemoryCache(true)
             .into(binding.playlistImageInSetting)
     }
 

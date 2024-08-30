@@ -124,6 +124,7 @@ class PlaylistRepositoryImpl(
         appDatabase.playListDao().deletePlaylist(
             convertor.map(playlist)
         )
+
         Log.d("MyTag", "del playlist")
     }
 

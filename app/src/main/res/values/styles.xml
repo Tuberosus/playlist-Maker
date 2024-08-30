@@ -123,6 +123,24 @@
         <item name="android:textColor">@color/yp_black</item>
     </style>
 
+    <style name="BottomSheetTextLines">
+        <item name="android:fontFamily">@font/ys_text_regular</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">?attr/colorOnSecondary</item>
+    </style>
+
+    <style name="BottomSheetPlaylistName">
+        <item name="android:fontFamily">@font/ys_text_regular</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">?attr/colorOnSecondary</item>
+    </style>
+
+    <style name="BottomSheetPlaylistDescription">
+        <item name="android:fontFamily">@font/ys_text_regular</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:textColor">?attr/colorOnSecondary</item>
+    </style>
+
 </resources>
 
 <!--parent="Widget.MaterialComponents.Button.UnelevatedButton"-->

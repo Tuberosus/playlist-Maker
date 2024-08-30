@@ -64,6 +64,7 @@ class PlaylistInteractorImpl(
     }
 
     override suspend fun deletePlaylist(playlist: Playlist, trackList: List<Track>) {
+        if (playlist.imageDir != null) externalFilesNavigator.deleteImage(playlist.imageDir)
         repository.deletePlaylist(playlist, trackList)
     }
 

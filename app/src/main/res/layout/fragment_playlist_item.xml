@@ -118,6 +118,18 @@
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
             android:background="@drawable/rounder" />
+        <TextView
+            android:id="@+id/emptyTracklistText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/yp_black"
+            android:fontFamily="@font/ys_text_regular"
+            android:textStyle="bold"
+            android:textSize="@dimen/text_error_size"
+            android:layout_marginTop="24dp"
+            android:gravity="center_horizontal"
+            android:visibility="gone"
+            android:text="@string/empty_tracklist_text"/>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
@@ -127,6 +139,12 @@
             android:layout_marginTop="@dimen/ic_track_padding_top"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
     </LinearLayout>
+
+    <View android:id="@+id/overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#99000000"
+        android:visibility="gone"/>
 
     <LinearLayout
         android:id="@+id/bottomSheetContainerSetting"
@@ -144,7 +162,7 @@
             android:layout_marginTop="10dp"
             android:background="@drawable/rounder" />
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/playlist_view_padding"
             android:orientation="vertical">
@@ -163,33 +181,37 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:layout_marginStart="@dimen/setting_title_margin">
-                    <TextView style="@style/PlaylistNameText"
+                    <TextView style="@style/BottomSheetPlaylistName"
                         android:id="@+id/playlistNameInSetting"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/ap_margin"
                         tools:text="Best Ever"/>
-                    <TextView style="@style/PlaylistNameText"
+                    <TextView style="@style/BottomSheetPlaylistDescription"
                         android:id="@+id/countInSetting"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         tools:text="0 треков"/>
                 </LinearLayout>
             </LinearLayout>
-            <TextView
+            <TextView style="@style/BottomSheetTextLines"
                 android:id="@+id/share_additional_menu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/texet_view_height"
+                android:layout_marginTop="@dimen/icon_padding"
+                android:gravity="center_vertical"
                 android:text="@string/share_playlist" />
-            <TextView
+            <TextView style="@style/BottomSheetTextLines"
                 android:id="@+id/edit_additional_menu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/texet_view_height"
+                android:gravity="center_vertical"
                 android:text="@string/edit_playlist" />
-            <TextView
+            <TextView style="@style/BottomSheetTextLines"
                 android:id="@+id/delete_additional_menu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/texet_view_height"
+                android:gravity="center_vertical"
                 android:text="@string/delete_playlist" />
         </LinearLayout>
 
