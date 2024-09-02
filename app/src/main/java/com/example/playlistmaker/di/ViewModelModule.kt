@@ -40,7 +40,7 @@ val viewModelModule = module {
     }
 
     viewModel { (playlistId: Int) ->
-        PlaylistItemViewModel(playlistId, get(), get(), androidApplication())
+        PlaylistItemViewModel(playlistId, get(), get())
     }
 
     viewModel { (playlist: Playlist) ->

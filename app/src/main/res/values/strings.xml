@@ -57,4 +57,23 @@
     <string name="delete_playlist_confirm">Хотите удалить плейлист "%s"?</string>
     <string name="edit">Редактировать</string>
     <string name="empty_tracklist_text">В этом плейлисте нет треков</string>
+    <string name="minute_form1">минута</string>
+    <string name="minute_form2">минуты</string>
+    <string name="minute_form3">минут</string>
+
+    <plurals name="minute_plural_name">
+        <item quantity="zero">"%d" минут</item>
+        <item quantity="one">"%d" минута</item>
+        <item quantity="few">"%d" минуты</item>
+        <item quantity="many">"%d" минут</item>
+        <item quantity="other">"%d" минут</item>
+    </plurals>
+
+    <plurals name="track_plural_name">
+        <item quantity="zero">"%d" треков</item>
+        <item quantity="one">"%d" трек</item>
+        <item quantity="few">"%d" трека</item>
+        <item quantity="many">"%d" треков</item>
+        <item quantity="other">"%d" треков</item>
+    </plurals>
 </resources>

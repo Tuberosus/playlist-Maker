@@ -9,10 +9,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.RequestOptions
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.models.Playlist
-import com.example.playlistmaker.util.TrackCountStringBuilder
 import java.io.File
 
 
@@ -42,7 +40,11 @@ class PlaylistViewHolder(
 
         playlistName.text = playlist.name
 
-        val trackCountString = TrackCountStringBuilder(itemView.context).build(playlist.trackCount)
+        val trackCountString = itemView.resources.getQuantityString(
+            R.plurals.track_plural_name,
+            playlist.trackCount,
+            playlist.trackCount,
+        )
         countTrack.text = trackCountString
     }
 }

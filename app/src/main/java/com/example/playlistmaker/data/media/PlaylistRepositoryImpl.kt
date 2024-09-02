@@ -3,6 +3,7 @@ package com.example.playlistmaker.data.media
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import com.example.playlistmaker.R
 import com.example.playlistmaker.data.converters.PlaylistDbConvertor
 import com.example.playlistmaker.data.db.AppDatabase
 import com.example.playlistmaker.data.db.entity.PlayListEntity
@@ -10,7 +11,6 @@ import com.example.playlistmaker.data.db.entity.TrackInPlaylistsEntity
 import com.example.playlistmaker.domain.db.PlaylistRepository
 import com.example.playlistmaker.domain.models.Playlist
 import com.example.playlistmaker.domain.models.Track
-import com.example.playlistmaker.util.TrackCountStringBuilder
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
@@ -26,13 +26,11 @@ class PlaylistRepositoryImpl(
 
     override fun updatePlaylist(playlist: Playlist, track: Track): Boolean {
 
-//        if (playlist.tracksId.contains(track.trackId)) return false
         val playlistId = appDatabase.linkPlaylistTrack().checkTrackInPlaylist(track.trackId, playlist.id)
-        Log.d("MyTag", playlistId.toString())
+        Log.d("MyTag", "Time is: ${System.currentTimeMillis()}")
         if (playlistId != 0) return false
 
         playlist.apply {
-//            tracksId.add(track.trackId)
             trackCount += 1
         }
         appDatabase.playListDao().updatePlaylist(
@@ -69,7 +67,14 @@ class PlaylistRepositoryImpl(
     override suspend fun getTrackOfPlaylist(playlistId: Int): List<Track> {
         val tracksId = appDatabase.linkPlaylistTrack().getTracksOfPlaylist(playlistId)
         val trackInPlaylistEntity = appDatabase.tracksInPlaylist().getTracksOfPlaylist(tracksId)
-        return convertFromTrackInPlaylistEntity(trackInPlaylistEntity)
+        val tracksInPlaylist = convertFromTrackInPlaylistEntity(trackInPlaylistEntity)
+        val sortedTrackList = emptyList<Track>().toMutableList()
+        tracksId.forEach { id ->
+            tracksInPlaylist.forEach { track ->
+                if (track.trackId == id) sortedTrackList += listOf(track)
+            }
+        }
+        return sortedTrackList
     }
 
     override suspend fun getTotalDuration(playlistId: Int): Long {
@@ -95,7 +100,11 @@ class PlaylistRepositoryImpl(
 
         if (tracks.isEmpty()) return false
 
-        val countTrack = TrackCountStringBuilder(context).build(tracks.size)
+        val countTrack = context.resources.getQuantityString(
+            R.plurals.track_plural_name,
+            tracks.size,
+            tracks.size,
+        )
         var countForList = 0
         var stringListOfTrack = ""
         tracks.forEach { track ->

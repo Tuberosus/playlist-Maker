@@ -113,6 +113,10 @@ class AudioPlayerFragment : Fragment() {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         }
 
+        binding.overlay.setOnClickListener {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        }
+
         binding.newPlaylistButton.setOnClickListener {
             findNavController().navigate(R.id.action_audioPlayerFragment_to_addPlaylistFragment)
         }

@@ -8,5 +8,5 @@ sealed interface PlaylistItemScreenState {
     data class Content(val playlist: Playlist,
                        val duration: String,
                        val trackList: List<Track>): PlaylistItemScreenState
-    data class EmptyShare(val toastText: String): PlaylistItemScreenState
+    data class EmptyShare(val toastTextId: Int): PlaylistItemScreenState
 }

@@ -12,9 +12,8 @@ class PlaylistDbConvertor(private val gson: Gson) {
     fun map(playlist: Playlist): PlayListEntity {
         return PlayListEntity(
             id = playlist.id,
-            name = playlist.name!!,
+            name = playlist.name,
             description = playlist.description,
-//            tracksId = gson.toJson(playlist.tracksId),
             imageDir = playlist.imageDir,
             trackCount = playlist.trackCount
         )
@@ -25,10 +24,6 @@ class PlaylistDbConvertor(private val gson: Gson) {
             id = playListEntity.id,
             name = playListEntity.name,
             description = playListEntity.description,
-//            tracksId = gson.fromJson(
-//                playListEntity.tracksId,
-//                object : TypeToken<ArrayList<Int>>() {}.type
-//            ),
             imageDir = playListEntity.imageDir,
             trackCount = playListEntity.trackCount
         )
@@ -71,7 +66,8 @@ class PlaylistDbConvertor(private val gson: Gson) {
     fun toLinkPlaylistTrackEntity(playlistId: Int, trackId: Int): LinkPlaylistTrackEntity {
         return LinkPlaylistTrackEntity(
             playlistId = playlistId,
-            trackId = trackId
+            trackId = trackId,
+            addTime = System.currentTimeMillis()
         )
     }
 }

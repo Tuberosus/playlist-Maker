@@ -56,14 +56,17 @@ open class AddPlaylistFragment : Fragment() {
         }
 
         binding.nameInputEditText.doOnTextChanged { text, start, before, count ->
-            binding.buttonSave.isEnabled = !text.isNullOrEmpty()
-            isAbleToClose = text.isNullOrEmpty()
-            viewModel.playlistName = text.toString()
+            val editText = text?.trim()
+            binding.buttonSave.isEnabled = !editText.isNullOrEmpty()
+            isAbleToClose = editText.isNullOrEmpty()
+            viewModel.playlistName = editText.toString()
         }
 
         binding.descriptionInputEditText.doOnTextChanged { text, start, before, count ->
-            isAbleToClose = text.isNullOrEmpty()
-            viewModel.playlistDescription = text.toString()
+            val editText = text?.trim()
+            isAbleToClose = editText.isNullOrEmpty()
+            Log.d("MyTag", editText.toString())
+            viewModel.playlistDescription = editText.toString()
         }
 
         val pickMedia =

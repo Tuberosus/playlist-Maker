@@ -21,7 +21,6 @@ class PlaylistItemViewModel(
     private val playlistId: Int,
     private val playlistInteractor: PlaylistInteractor,
     private val getJsonFromTrackUseCase: GetJsonFromTrackUseCase,
-    private val application: Application
 ) : ViewModel() {
 
     private val dateFormat = SimpleDateFormat("mm", Locale.getDefault())
@@ -65,9 +64,7 @@ class PlaylistItemViewModel(
             val isShare = playlistInteractor.sharePlaylist(playlistId)
             if (!isShare) screenStateLiveData.postValue(
                 PlaylistItemScreenState.EmptyShare(
-                    application.getString(
                         R.string.empty_share_toast
-                    )
                 )
             )
         }

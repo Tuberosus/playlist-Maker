@@ -9,5 +9,6 @@ import com.example.playlistmaker.data.db.dao.LinkPlaylistTrackDao
 )
 class LinkPlaylistTrackEntity(
     val playlistId: Int,
-    val trackId: Int
+    val trackId: Int,
+    val addTime: Long
 )
