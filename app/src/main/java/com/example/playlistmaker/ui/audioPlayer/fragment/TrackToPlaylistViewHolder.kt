@@ -4,12 +4,10 @@ import android.util.TypedValue
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
-import com.example.playlistmaker.domain.db.TrackCountStringBuilder
 import com.example.playlistmaker.domain.models.Playlist
 import java.io.File
 
@@ -35,6 +33,10 @@ class TrackToPlaylistViewHolder(itemView: View): RecyclerView.ViewHolder(itemVie
             .into(playlistImage)
 
         playListName.text = playlist.name
-        trackCount.text = TrackCountStringBuilder(itemView.context).build(playlist.trackCount)
+        trackCount.text = itemView.resources.getQuantityString(
+            R.plurals.track_plural_name,
+            playlist.trackCount,
+            playlist.trackCount
+        )
     }
 }

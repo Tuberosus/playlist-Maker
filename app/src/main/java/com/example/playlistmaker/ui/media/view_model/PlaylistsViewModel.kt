@@ -18,10 +18,6 @@ class PlaylistsViewModel(
     private val playlistsLiveData = MutableLiveData<PlaylistScreenState>()
     val playlistObserver: LiveData<PlaylistScreenState> = playlistsLiveData
 
-    init {
-        getPlaylists()
-    }
-
     fun getPlaylists() {
         renderState(PlaylistScreenState.Loading)
         viewModelScope.launch(Dispatchers.IO) {

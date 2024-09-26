@@ -1,6 +1,7 @@
 package com.example.playlistmaker.data.db.dao
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -13,15 +14,24 @@ interface PlaylistDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertPlaylist(playlist: PlayListEntity)
 
+    @Update
+    fun fullUpdate(playListEntity: PlayListEntity)
+
+    @Delete
+    fun deletePlaylist(playListEntity: PlayListEntity)
+
     @Query("SELECT * FROM $TABLE_NAME WHERE name = :playlistName")
     fun getPlaylistByName(playlistName: String): PlayListEntity
 
     @Query("SELECT * FROM $TABLE_NAME")
     suspend fun getPlaylists(): List<PlayListEntity>
 
+    @Query("SELECT * FROM $TABLE_NAME WHERE id = :playlistId")
+    suspend fun getPlaylistById(playlistId: Int): PlayListEntity?
+
     @Query("UPDATE $TABLE_NAME set " +
-            "tracksId = :tracksId, trackCount = :trackCount WHERE name = :name")
-    fun updatePlaylist(name: String, tracksId: String, trackCount: Int)
+            "trackCount = :trackCount WHERE id = :id")
+    fun updatePlaylist(id: Int, trackCount: Int)
 
     companion object {
         const val TABLE_NAME = "playlist_table"

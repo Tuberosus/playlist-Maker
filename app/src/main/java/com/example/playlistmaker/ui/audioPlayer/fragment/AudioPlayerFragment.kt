@@ -65,6 +65,7 @@ class AudioPlayerFragment : Fragment() {
 
         adapter = TrackToPlayListAdapter{
             viewModel.putTrackIntoPlaylist(it)
+            viewModel.getPlaylistState()
         }
 
         binding.bottomRecyclerView.layoutManager =
@@ -110,6 +111,10 @@ class AudioPlayerFragment : Fragment() {
 
         binding.buttonAdd.setOnClickListener {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+
+        binding.overlay.setOnClickListener {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         }
 
         binding.newPlaylistButton.setOnClickListener {

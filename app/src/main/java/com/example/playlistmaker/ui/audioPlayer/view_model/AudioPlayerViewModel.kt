@@ -171,7 +171,7 @@ class AudioPlayerViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             val isAdd = playlistInteractor.updatePlaylist(playlist, track)
             withContext(Dispatchers.Main) {
-                makeToastText(isAdd, playlist.name)
+                makeToastText(isAdd, playlist.name!!)
             }
         }
         getPlaylistState()

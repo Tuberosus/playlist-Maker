@@ -18,16 +18,15 @@ import com.example.playlistmaker.databinding.FragmentAddPlaylistBinding
 import com.example.playlistmaker.ui.media.view_model.AddPlaylistViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class AddPlaylistFragment : Fragment() {
+open class AddPlaylistFragment : Fragment() {
 
-    private val viewModel by viewModel<AddPlaylistViewModel>()
+    open val viewModel by viewModel<AddPlaylistViewModel>()
 
     private var _binding: FragmentAddPlaylistBinding? = null
-    private val binding get() = _binding!!
+    val binding get() = _binding!!
 
     private var isAbleToClose = true
 
@@ -57,14 +56,17 @@ class AddPlaylistFragment : Fragment() {
         }
 
         binding.nameInputEditText.doOnTextChanged { text, start, before, count ->
-            binding.buttonSave.isEnabled = !text.isNullOrEmpty()
-            isAbleToClose = text.isNullOrEmpty()
-            viewModel.playlistName = text.toString()
+            val editText = text?.trim()
+            binding.buttonSave.isEnabled = !editText.isNullOrEmpty()
+            isAbleToClose = editText.isNullOrEmpty()
+            viewModel.playlistName = editText.toString()
         }
 
         binding.descriptionInputEditText.doOnTextChanged { text, start, before, count ->
-            isAbleToClose = text.isNullOrEmpty()
-            viewModel.playlistDescription = text.toString()
+            val editText = text?.trim()
+            isAbleToClose = editText.isNullOrEmpty()
+            Log.d("MyTag", editText.toString())
+            viewModel.playlistDescription = editText.toString()
         }
 
         val pickMedia =
